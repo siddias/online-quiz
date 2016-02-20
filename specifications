@@ -1,0 +1,16 @@
+Functionalities to be added:
+1) Provide User Login (with verification)
+2) Options for Teachers:
+  a)  Upload questions in multiple formats (fill in the blanks, MCQ - single and multiple correct, T/F, sections)
+  b)  Question bank upload facility (random set, categorised by topics, difficulty or units)
+  c)  Summary of results in EXCEL sheet
+  d)  Allot grace marks (if incorrect questions are brought to notice)
+  e)  Create student groups so that targeted quizes can be efficiently assigned
+  f)  Select time duration to give quiz
+3) Options for Students:
+  a) Flag questions for review later
+  b) View past performances
+  c) Flag question as incorrect for review by teacher
+  d) Prevent leaving of current tab during duration of quiz
+  e) Timer for duration of the quiz
+  f) Answers to be made available after quiz duration expires
