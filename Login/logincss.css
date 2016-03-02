@@ -7,7 +7,7 @@ body
 {
     font: 12px 'Lucida Sans Unicode', 'Trebuchet MS', Arial, Helvetica;    
     margin: 0;
-    //background-image:url('./bkgimg.jpg');
+    /*background-image:url('./bkgimg.jpg');*/
     background-color:#2ec866;
     /*background-image: -webkit-gradient(linear, left top, left bottom, from(#ebeef2), to(#d9dee2));
     background-image: -webkit-linear-gradient(top, #ebeef2, #d9dee2);
@@ -21,9 +21,9 @@ body
 
 #login
 {
-     background: linear-gradient(to right, red , yellow);
-    /*background-color: #fff;
-    background-image: url('./bkgimg.jpg');
+    /*background: linear-gradient(to right, red , yellow);*/
+    background-color: #fff;
+    /*background-image: url('./bkgimg.jpg');
     background-position: -100px -77px;*/
     /*background-image: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#eee));
     background-image: -webkit-linear-gradient(top, #fff, #eee);
