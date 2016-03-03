@@ -9,9 +9,12 @@
 </head>
 
 <body>
-
-<form id="login" action="">
-    <h1>Log In</h1>
+<div id="login">
+<ul class="login_tab unstyled horizontal clearfix">
+        <li class="signup-toggle toggle "><a href="/signup" data-toggle="tab">Sign Up</a></li>
+        <li class="login-toggle toggle active"><a href="/login" data-toggle="tab">Log In</a></li>
+    </ul>
+<form class="login_form" action="" style="display:none">
     <fieldset id="inputs">
         <input id="username" type="text" placeholder="Username" autofocus required>   
         <input id="password" type="password" placeholder="Password" required>
@@ -21,6 +24,17 @@
         <a href="">Forgot your password?</a><a href="">Register</a>
     </fieldset>
 </form>
+<form  class="signup_form" action="" style="display:block;">
+    <fieldset id="inputs">
+        <input id="username" type="text" placeholder="Username" autofocus required>   
+        <input id="password" type="password" placeholder="Password" required>
+    </fieldset>
+    <fieldset id="actions">
+        <input type="submit" id="submit" value="Log in">
+        <a href="">Forgot your password?</a><a href="">Register</a>
+    </fieldset>
+</form>
+</div>
 
 
 </body>
