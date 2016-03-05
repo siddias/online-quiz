@@ -1,41 +1,90 @@
-
 <!DOCTYPE html>
-
-<html>
+<html lang="en">
 <head>
-<title>Create a nice login form using CSS3 and HTML5</title>
-<link rel="stylesheet" type="text/css" href="./logincss.css">
-
+  <title>Login Page</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="bootstrap-3.3.6-dist/css/bootstrap.min.css">
+  <script src="jquery-1.12.1.min.js"></script>
+  <script src="bootstrap-3.3.6-dist/js/bootstrap.min.js"></script>
 </head>
+<body style="background-color:#86B2E5">
 
-<body>
-<div id="login">
-<ul class="login_tab unstyled horizontal clearfix">
-        <li class="signup-toggle toggle "><a href="/signup" data-toggle="tab">Sign Up</a></li>
-        <li class="login-toggle toggle active"><a href="/login" data-toggle="tab">Log In</a></li>
-    </ul>
-<form class="login_form" action="" style="display:none">
-    <fieldset id="inputs">
-        <input id="username" type="text" placeholder="Username" autofocus required>   
-        <input id="password" type="password" placeholder="Password" required>
-    </fieldset>
-    <fieldset id="actions">
-        <input type="submit" id="submit" value="Log in">
-        <a href="">Forgot your password?</a><a href="">Register</a>
-    </fieldset>
-</form>
-<form  class="signup_form" action="" style="display:block;">
-    <fieldset id="inputs">
-        <input id="username" type="text" placeholder="Username" autofocus required>   
-        <input id="password" type="password" placeholder="Password" required>
-    </fieldset>
-    <fieldset id="actions">
-        <input type="submit" id="submit" value="Log in">
-        <a href="">Forgot your password?</a><a href="">Register</a>
-    </fieldset>
-</form>
+<div class="container" style="width:40%;margin-top:10%;">
+  <ul class="nav nav-tabs">
+    <li class="active text-center" style="width:50%;background-color:#FFFFFF;border-top-left-radius:0.2em;"><a data-toggle="tab" href="#login">LOGIN</a></li>
+    <li class="text-center" style="width:50%;background-color:#FFFFFF;border-top-right-radius:0.2em;"><a data-toggle="tab" href="#signup">SIGN UP</a></li>
+  </ul>
+
+  <div class="tab-content" style="background-color:#FFFFFF">
+    <div id="login" class="tab-pane fade in active">
+      <form class="form-horizontal" role="form">
+        <br/>
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-8">
+            <input type="email" class="form-control" id="email" placeholder="Enter email">
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-8">          
+            <input type="password" class="form-control" id="pwd" placeholder="Enter password">
+          </div>
+        </div>
+        <div class="form-group">        
+          <div class="col-sm-offset-6 col-sm-6">
+            <a href="#">Forgot Password?</a>
+          </div>
+        </div>
+        <div class="form-group">        
+          <div class="col-sm-offset-2 col-sm-8">
+            <button type="submit" class="btn btn-primary btn-block">Log In</button>
+          </div>
+        </div>
+        <br/><br/>
+      </form>
+    </div>
+
+    <div id="signup" class="tab-pane fade">
+      <form class="form-horizontal" role="form">
+        <br/>
+         <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-8">
+            <input type="text" class="form-control" id="fname" placeholder="Enter First Name">
+          </div>
+        </div>
+         <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-8">
+            <input type="text" class="form-control" id="lname" placeholder="Enter Last Name">
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-8">
+            <input type="email" class="form-control" id="email" placeholder="Enter email">
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-4">          
+            <label class="radio-inline"><input type="radio" name="optradio">Professor</label>
+          </div>
+          <div class="col-sm-4">
+            <label class="radio-inline"><input type="radio" name="optradio">Student</label>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-8">
+            <input type="text" class="form-control" id="fname" placeholder="Enter USN/EmployeeID">
+          </div>
+        </div>
+        <div class="form-group">        
+          <div class="col-sm-offset-2 col-sm-8">
+            <button type="submit" class="btn btn-primary btn-block">Sign Up</button>
+          </div>
+        </div>
+        <br/><br/>
+      </form>
+    </div>
+  </div>
 </div>
-
 
 </body>
 </html>
