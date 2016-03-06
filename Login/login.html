@@ -11,7 +11,7 @@
       }
     .nav-tabs{border-bottom:0px solid #fff}
     .nav-tabs>li{float:left;margin-bottom:-1px}
-    .nav-tabs>li>a{margin-right:0px;line-height:1.42857143;border:0.5px solid #979faf;border-radius:4px 4px 0 0;background-color:#e6e6e6;}
+    .nav-tabs>li>a{margin-right:0px;line-height:1.42857143;border:0.5px solid transparent;border-bottom-style: hidden;border-radius:5px 5px 0 0;background-color:#e6e6e6;}
     .nav-tabs>li>a:hover{border-color:#eee #eee #ddd}
     .nav-tabs>li.active>a,.nav-tabs>li.active>a:focus,.nav-tabs>li.active>a:hover{margin-bottom:-1px;color:#555;cursor:default;background-color:#fff;border:1px solid #ddd;border-bottom-color:transparent}
   </style>
@@ -20,13 +20,13 @@
 </head>
 <body style="background-color:#86B2E5">
 
-<div class="container" style="width:40%;margin-top:10%;border-top-left-radius:0.2em;border-top-right-radius:0.2em;">
-  <ul class="nav nav-tabs" style="outline:none">
-    <li class="active text-center" style="width:50%;"><a data-toggle="tab" href="#login">LOGIN</a></li>
-    <li class="text-center" style="width:50%;"><a data-toggle="tab" href="#signup">SIGN UP</a></li>
+<div class="container" style="width:40%;margin-top:10%;">
+  <ul class="nav nav-tabs">
+    <li class="active text-center" style="width:50%;"><a data-toggle="tab" href="#login" style="border-width:1.5px 0 0 1.5px;border-color:#5795db">LOGIN</a></li>
+    <li class="text-center" style="width:50%;"><a data-toggle="tab" href="#signup" style="border-width:1.5px 1.5px 0 0;border-color:#5795db">SIGN UP</a></li>
   </ul>
 
-  <div class="tab-content" style="background-color:#FFFFFF;border-bottom-right-radius:0.2em;border-bottom-left-radius:0.2em;">
+  <div class="tab-content" style="background-color:#FFFFFF;border-bottom-right-radius:5px;border-bottom-left-radius:5px;border:1.5px solid #5795db;border-top-style: hidden">
     <div id="login" class="tab-pane fade in active">
       <form class="form-horizontal" role="form">
         <br/>
@@ -50,7 +50,7 @@
             <button type="submit" class="btn btn-primary btn-block">Log In</button>
           </div>
         </div>
-        <br/><br/>
+        <br/>
       </form>
     </div>
 
@@ -78,8 +78,8 @@
           </div>
         </div>
         <div class="form-group">
-          <div class="col-sm-offset-2 col-sm-4">          
-            <label class="radio-inline"><input type="radio" name="optradio">Professor</label>
+          <div class="col-sm-offset-3 col-sm-4">          
+            <label class="radio-inline text-center"><input type="radio" name="optradio">Professor</label>
           </div>
           <div class="col-sm-4">
             <label class="radio-inline"><input type="radio" name="optradio">Student</label>
@@ -95,7 +95,7 @@
             <button type="submit" class="btn btn-primary btn-block">Sign Up</button>
           </div>
         </div>
-        <br/><br/>
+        <br/>
       </form>
     </div>
   </div>
