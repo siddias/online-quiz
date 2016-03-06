@@ -5,18 +5,28 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="bootstrap-3.3.6-dist/css/bootstrap.min.css">
+  <style type="text/css">
+    a {
+      outline:none !important;
+      }
+    .nav-tabs{border-bottom:0px solid #fff}
+    .nav-tabs>li{float:left;margin-bottom:-1px}
+    .nav-tabs>li>a{margin-right:0px;line-height:1.42857143;border:0.5px solid #979faf;border-radius:4px 4px 0 0;background-color:#e6e6e6;}
+    .nav-tabs>li>a:hover{border-color:#eee #eee #ddd}
+    .nav-tabs>li.active>a,.nav-tabs>li.active>a:focus,.nav-tabs>li.active>a:hover{margin-bottom:-1px;color:#555;cursor:default;background-color:#fff;border:1px solid #ddd;border-bottom-color:transparent}
+  </style>
   <script src="jquery-1.12.1.min.js"></script>
   <script src="bootstrap-3.3.6-dist/js/bootstrap.min.js"></script>
 </head>
 <body style="background-color:#86B2E5">
 
-<div class="container" style="width:40%;margin-top:10%;">
-  <ul class="nav nav-tabs">
-    <li class="active text-center" style="width:50%;background-color:#FFFFFF;border-top-left-radius:0.2em;"><a data-toggle="tab" href="#login">LOGIN</a></li>
-    <li class="text-center" style="width:50%;background-color:#FFFFFF;border-top-right-radius:0.2em;"><a data-toggle="tab" href="#signup">SIGN UP</a></li>
+<div class="container" style="width:40%;margin-top:10%;border-top-left-radius:0.2em;border-top-right-radius:0.2em;">
+  <ul class="nav nav-tabs" style="outline:none">
+    <li class="active text-center" style="width:50%;"><a data-toggle="tab" href="#login">LOGIN</a></li>
+    <li class="text-center" style="width:50%;"><a data-toggle="tab" href="#signup">SIGN UP</a></li>
   </ul>
 
-  <div class="tab-content" style="background-color:#FFFFFF">
+  <div class="tab-content" style="background-color:#FFFFFF;border-bottom-right-radius:0.2em;border-bottom-left-radius:0.2em;">
     <div id="login" class="tab-pane fade in active">
       <form class="form-horizontal" role="form">
         <br/>
@@ -60,6 +70,11 @@
         <div class="form-group">
           <div class="col-sm-offset-2 col-sm-8">
             <input type="email" class="form-control" id="email" placeholder="Enter email">
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-8">          
+            <input type="password" class="form-control" id="pwd" placeholder="Enter password">
           </div>
         </div>
         <div class="form-group">
