@@ -3,18 +3,90 @@
 session_start(); //starts a new session, session is started so multiple pages on the server can share data
 require_once 'class.user.php'; //if not found then fatal error. Stricter than include
 
-$user_login = new USER(); //USER OBJECT created
+$user = new USER(); //USER OBJECT created
 
-if($user_login->is_logged_in()) //check if user is logged in. if yes redirect him to homepage
-    $user_login->redirect('home.php');
+if($user->is_logged_in()) //check if user is logged in. if yes redirect him to homepage
+    $user->redirect('home.php');
 
-if(isset($_POST['btn-login']))
+if(isset($_POST['login']))
 {
-    $email = trim($_POST['txtemail']); //remove spaces from either end
-    $upass = trim($_POST['txtupass']);
+    $email = trim($_POST['email']); //remove spaces from either end
+    $upass = trim($_POST['pwd']);
+    if($user->login($email,$upass)); //checks valid user login. if yes then display homepage
+        $user->redirect('home.php');
 
-    if($user_login->login($email,$upass)) //checks valid user login. if yes then display homepage
-        $user_login->redirect('home.php');
+}
+
+if(isset($_POST['signup'])) //when sign up form is submitted
+{
+	$id = strtoupper(trim($_POST['id']));
+	$fname = strtoupper(trim($_POST['fname']));
+	$lname = strtoupper(trim($_POST['lname']));
+	$email = strtolower(trim($_POST['email']));
+	$pass = trim($_POST['pwd']);
+	$type = trim($_POST['type']);
+	$code = md5(uniqid(rand())); //unique token code
+
+	$stmt = $user->runQuery("SELECT * FROM members WHERE email=:email_id");
+	$stmt->execute(array(":email_id"=>$email));
+	$row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+	if($stmt->rowCount() > 0)
+	{
+		$msg = "
+		      <div class='alert alert-warning'>
+				<button class='close' data-dismiss='alert'>&times;</button>
+					<strong>Sorry !</strong>  email allready exists , Please Try another one
+			  </div>
+			  ";
+	}
+	else
+	{
+		if($user->register($id,$fname,$lname,$email,$pass,$type,$code))
+		{
+			$id = $user->lasdID();
+			$key = base64_encode($id); //encode the userId
+			$id = $key;
+
+			//message for sign up
+			$message = "
+						Hello $fname,
+						<br /><br />
+						Welcome to Quiz-It!<br/>
+						To complete your registration  please , just click following link<br/>
+						<br />
+						<a href='http://localhost/quiz/verify.php?id=$id&code=$code'>Click HERE to Activate :)</a>
+						<br /><br />
+						Thanks,";
+
+			$subject = "Confirm Registration";
+
+			$user->send_mail($email,$message,$subject);
+			$msg = "
+					<div class='alert alert-success'>
+						<button class='close' data-dismiss='alert'>&times;</button>
+						<strong>Success!</strong>  We've sent an email to $email.
+                    Please click on the confirmation link in the email to create your account.
+			  		</div>
+					"; //confirmation message to show user
+		}
+		else //if some error occurs while executing query
+			echo "ERROR!";
+	}
+}
+if(isset($_GET['inactive'])) //redirected to index.php because account not activated
+{
+    $msg="<div class='alert alert-danger'>
+        <button class='close' data-dismiss='alert'>&times;</button>
+        <strong>Sorry!</strong> This Account is not Activated Go to your Inbox and Activate it.
+    </div>";
+}
+if(isset($_GET['error'])) //redirected to index.php because of invalid sign in credentials
+{
+  $msg="<div class='alert alert-danger'>
+      <button class='close' data-dismiss='alert' >&times;</button>
+      <strong>Wrong Details!</strong>
+      </div>";
 }
 ?>
 
@@ -23,47 +95,101 @@ if(isset($_POST['btn-login']))
 <head>
     <title>Login | Quiz-It</title>
     <meta charset="utf-8">
-    <!-- Bootstrap -->
-    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
-    <link href="bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" media="screen">
-    <link href="assets/styles.css" rel="stylesheet" media="screen">
-    <script src="js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/index.css">
 </head>
-<body id="login">
-  <div class="container">
-      <?php
-      if(isset($_GET['inactive'])) //redirected to index.php because account not activated
-      {
-          ?>
-          <div class='alert alert-error'>
-              <button class='close' data-dismiss='alert'>&times;</button>
-              <strong>Sorry!</strong> This Account is not Activated Go to your Inbox and Activate it.
-          </div>
-          <?php
-      }
-      ?>
-      <form class="form-signin" method="post">
-      <?php
-      if(isset($_GET['error'])) //redirected to index.php because of invalid sign in credentials
-      {
-          ?>
-          <div class='alert alert-success'>
-              <button class='close' data-dismiss='alert'>&times;</button>
-              <strong>Wrong Details!</strong>
-          </div>
-          <?php
-      }
-      ?>
-      <h2 class="form-signin-heading">Sign In.</h2><hr />
-      <input type="email" class="input-block-level" placeholder="Email address" name="txtemail" required />
-      <input type="password" class="input-block-level" placeholder="Password" name="txtupass" required />
-      <hr />
-      <button class="btn btn-large btn-primary" type="submit" name="btn-login">Sign in</button>
-      <a href="signup.php" style="float:right;" class="btn btn-large">Sign Up</a><hr />
-      <a href="fpass.php">Lost your Password ? </a>
-    </form>
-  </div> <!-- /container -->
-  <script src="bootstrap/js/jquery-1.9.1.min.js"></script>
-  <script src="bootstrap/js/bootstrap.min.js"></script>
+<body>
+    <div class="container" style="width:40%;margin-top:10%;">
+        <?php if(isset($msg)) echo $msg;  ?>
+        <ul class="nav nav-tabs">
+            <li class="active text-center" style="width:50%;"><a data-toggle="tab" href="#login" style="border-width:3px 0 0 3px;border-color:#5795db">LOGIN</a></li>
+            <li class="text-center" style="width:50%;"><a data-toggle="tab" href="#signup" style="border-width:3px 3px 0 0;border-color:#5795db">SIGN UP</a></li>
+        </ul>
+
+        <div class="tab-content" style="background-color:#FFFFFF;border-bottom-right-radius:5px;border-bottom-left-radius:5px;border:3px solid #5795db;border-top-style: hidden">
+            <div id="login" class="tab-pane fade in active">
+                <form class="form-horizontal" role="form" method="post" >
+                    <br/>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-8">
+                            <input type="email" class="form-control" name="email" placeholder="Enter email" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-8">
+                            <input type="password" class="form-control" name="pwd" placeholder="Enter password" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-6 col-sm-6">
+                            <a href="fpass.php">Forgot Password?</a>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-8">
+                            <input type="submit" name="login" value="Log In" class="btn btn-primary btn-block">
+                        </div>
+                    </div>
+                    <br/>
+                </form>
+            </div>
+
+            <div id="signup" class="tab-pane fade">
+                <form class="form-horizontal" role="form" method="post">
+                    <br/>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-8">
+                            <input type="text" class="form-control" name="fname" placeholder="Enter First Name" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-8">
+                            <input type="text" class="form-control" name="lname" placeholder="Enter Last Name" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-8">
+                            <input type="email" class="form-control" name="email" placeholder="Enter email"required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-8">
+                            <input type="password" class="form-control" name="pwd" placeholder="Enter password"  required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-3 col-sm-4">
+                            <label class="radio-inline text-center">
+                                <input type="radio" name="type">Professor</label>
+                        </div>
+                        <div class="col-sm-4">
+                            <label class="radio-inline">
+                                <input type="radio" name="type" checked="checked">Student</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-8">
+                            <input type="text" class="form-control" name="id" placeholder="Enter USN/EmployeeID">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-8">
+                            <input type="submit" name="signup" value="Sign Up" class="btn btn-primary btn-block">
+                        </div>
+                    </div>
+                    <br/>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="js/jquery-1.12.1.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script>
+        if(typeof window.history.pushState == 'function') {
+            window.history.pushState({}, "Hide", "index.php");
+        }
+    </script>
 </body>
+
 </html>

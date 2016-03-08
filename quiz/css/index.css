@@ -1,0 +1,32 @@
+body {
+    background-color: #86B2E5;
+}
+a {
+    outline: none !important;
+}
+.nav-tabs {
+    border-bottom: 0px solid #fff
+}
+.nav-tabs>li {
+    float: left;
+    margin-bottom: -1px
+}
+.nav-tabs>li>a {
+    margin-right: 0px;
+    line-height: 1.42857143;
+    border: 0.5px solid transparent;
+    border-bottom-style: hidden;
+    border-radius: 5px 5px 0 0;
+    background-color: #e6e6e6;
+}
+.nav-tabs>li>a:hover {
+    border-color: #eee #eee #ddd
+}
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
+    margin-bottom: -1px;
+    color: #555;
+    cursor: default;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-bottom-color: transparent
+}

@@ -3,14 +3,13 @@ class Database
 {
 
     private $host = "localhost";    //hostname
-    private $db_name = "dbtest";    //database name
+    private $db_name = "quizit";    //database name
     private $username = "root";     //username for database
     private $password = "";         //password for database
     public $conn;
 
     public function dbConnection()
 	{
-
 	    $this->conn = null;
         try
 		{

@@ -25,17 +25,20 @@ class USER
 		return $stmt;
 	}
 
-	public function register($uname,$email,$upass,$code)
+	public function register($id,$fname,$lname,$email,$pass,$type,$code)
 	{
 		try
 		{
-			$password = md5($upass); //hash the password
-			$stmt = $this->conn->prepare("INSERT INTO tbl_users(userName,userEmail,userPass,tokenCode)
-			                             VALUES(:user_name, :user_mail, :user_pass, :active_code)");
-			$stmt->bindparam(":user_name",$uname);
-			$stmt->bindparam(":user_mail",$email);
-			$stmt->bindparam(":user_pass",$password);
-			$stmt->bindparam(":active_code",$code);
+			$password = md5($pass); //hash the password
+			$stmt = $this->conn->prepare("INSERT INTO members(id,fname,lname,email,pass,userType,tokenCode)
+			                             VALUES(:id,:fname,:lname,:email,:pass,:userType,:tokenCode)");
+			$stmt->bindparam(":id",$id);
+			$stmt->bindparam(":fname",$fname);
+			$stmt->bindparam(":lname",$lname);
+			$stmt->bindparam(":email",$email);
+			$stmt->bindparam(":pass",$password);
+			$stmt->bindparam(":userType",$type);
+			$stmt->bindparam(":tokenCode",$code);
 			$stmt->execute();
 			return $stmt;
 		}
@@ -49,18 +52,18 @@ class USER
 	{
 		try
 		{
-			$stmt = $this->conn->prepare("SELECT * FROM tbl_users WHERE userEmail=:email_id");
+			$stmt = $this->conn->prepare("SELECT * FROM members WHERE email=:email_id");
 			$stmt->execute(array(":email_id"=>$email)); //or bindparam can be used
 			$userRow=$stmt->fetch(PDO::FETCH_ASSOC); //create associative array
 
 			if($stmt->rowCount() == 1) //user exists
 			{
-				if($userRow['userStatus']=="Y") //user is verified
+				if($userRow['verified']=='Y') //user is verified
 				{
-					if($userRow['userPass']==md5($upass)) //hashes the password and checks for equality
+					if($userRow['pass']==md5($upass)) //hashes the password and checks for equality
 					{
-						$_SESSION['userSession'] = $userRow['userID']; //uid as session variable.uid is unique
-						return true; //returns true
+						$_SESSION['userSession'] = $userRow['userId']; //uid as session variable.uid is unique
+						return true;
 					}
 					else
 					{
@@ -100,10 +103,10 @@ class USER
 	public function logout()
 	{
 		session_destroy(); //end session
-		$_SESSION['userSession'] = false; //remove previous uid
+		unset($_SESSION['userSession']); //remove previous uid
 	}
 
-	function send_mail($email,$message,$subject)
+	public function send_mail($email,$message,$subject)
 	{
 		require_once('mailer/class.phpmailer.php');
 		$mail = new PHPMailer();
@@ -114,12 +117,12 @@ class USER
 		$mail->Host       = "smtp.gmail.com";
 		$mail->Port       = 587;
 		$mail->AddAddress($email);
-		$mail->Username="siddias007@gmail.com"; //determines which email id the mail is sent from
-		$mail->Password="benedict007";
-		$mail->SetFrom("siddias007@gmail.com","Quiz-It");
-		$mail->AddReplyTo("siddias007@gmail.com","Quiz-It");
+		$mail->Username="bmscequizit@gmail.com"; //determines which email id the mail is sent from
+		$mail->Password="bmsce1234";
+		$mail->SetFrom("bmscequizit@gmail.com","Quiz-It");
+		$mail->AddReplyTo("bmscequizit@gmail.com","Quiz-It");
 		$mail->Subject  = $subject;
 		$mail->MsgHTML($message); //construct body of message from html
-		$mail->Send(); //send message
+			$mail->Send(); //send message
 	}
 }

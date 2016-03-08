@@ -12,7 +12,7 @@ if(isset($_POST['btn-submit']))
 {
 	$email = $_POST['txtemail'];
 
-	$stmt = $user->runQuery("SELECT userID FROM tbl_users WHERE userEmail=:email LIMIT 1");
+	$stmt = $user->runQuery("SELECT * FROM members WHERE email=:email LIMIT 1");
 	$stmt->execute(array(":email"=>$email));
 	$row = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -21,18 +21,19 @@ if(isset($_POST['btn-submit']))
 		$id = base64_encode($row['userID']);
 		$code = md5(uniqid(rand()));
 
-		$stmt = $user->runQuery("UPDATE tbl_users SET tokenCode=:token WHERE userEmail=:email"); //generate new token
+		$stmt = $user->runQuery("UPDATE members SET tokenCode=:token WHERE email=:email"); //generate new token
 		$stmt->execute(array(":token"=>$code,"email"=>$email));
 
+		$u = $row['fname'];
 		//password reset message
 		$message= "
-				   Hello , $email
+				   Hello $u,
 				   <br /><br />
 				   We got requested to reset your password, if you do this then just click the following link to reset your password, if not just ignore                   this email,
 				   <br /><br />
 				   Click Following Link To Reset Your Password
 				   <br /><br />
-				   <a href='http://localhost/quiz/resetpass.php?id=$id&code=$code'>click here to reset your password</a>
+				   <a href='http://localhost/quiz/resetpass.php?id=$id&code=$code'>Click here to reset your password</a>
 				   <br /><br />
 				   thank you :)
 				   ";
@@ -61,10 +62,9 @@ if(isset($_POST['btn-submit']))
 <head>
 	<title>Forgot Password</title>
 	<meta charset="utf-8">
-    <!-- Bootstrap -->
-    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
-    <link href="bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" media="screen">
-    <link href="assets/styles.css" rel="stylesheet" media="screen">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/bootstrap-responsive.min.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
 </head>
 <body id="login">
 	<div class="container">
@@ -87,8 +87,8 @@ if(isset($_POST['btn-submit']))
         <button class="btn btn-danger btn-primary" type="submit" name="btn-submit">Generate new Password</button>
 		<a href="index.php" style="float:right;"class="btn ">Sign In</a><hr />
       </form>
-    </div> <!-- /container -->
-    <script src="bootstrap/js/jquery-1.9.1.min.js"></script>
-    <script src="bootstrap/js/bootstrap.min.js"></script>
+    </div>
+    <script src="js/jquery-1.12.1.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
 </body>
 </html>
