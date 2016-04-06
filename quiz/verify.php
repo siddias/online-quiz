@@ -14,7 +14,7 @@ if(isset($_GET['id']) && isset($_GET['code']))
 	$statusY = "Y";
 	$statusN = "N";
 
-	$stmt = $user->runQuery("SELECT userId,verified FROM members WHERE userId=:uID AND tokenCode=:code LIMIT 1");
+	$stmt = $user->runQuery("SELECT userId,userType,verified FROM members WHERE userId=:uID AND tokenCode=:code LIMIT 1");
 	$stmt->execute(array(":uID"=>$id,":code"=>$code));
 	$row=$stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -30,16 +30,26 @@ if(isset($_GET['id']) && isset($_GET['code']))
 			$msg = "
 		           <div class='alert alert-success'>
 				   <button data-dismiss='alert'>&times;</button>
-					  <strong>WoW !</strong>  Your Account is Now Activated : <a href='index.php'>Login here</a>
+					  <strong>Wow !</strong>  Your Account is Now Activated : <a href='index.php'>Login here</a>
 			       </div>
 			       ";
+			if($row['userType']=='S'){
+				$stmt = $user->runQuery("CREATE TABLE past_quiz".$id."(id INT(10) NOT NULL AUTO_INCREMENT,quizId INT(10) NOT NULL,score INT(10) NOT NULL,PRIMARY KEY(id),FOREIGN KEY(quizId) REFERENCES quizlist(quizId) ON DELETE CASCADE)ENGINE = InnoDB");
+				$stmt->execute();
+			}
+			else {
+				$stmt = $user->runQuery("CREATE TABLE past_quiz".$id."(id INT(10) NOT NULL AUTO_INCREMENT,quizId INT(10) NOT NULL,PRIMARY KEY(id),FOREIGN KEY(quizId) REFERENCES quizlist(quizId) ON DELETE CASCADE)ENGINE = InnoDB");
+				$stmt->execute();
+			}
+			$stmt = $user->runQuery("CREATE TABLE live_quiz".$id."(id INT(10) NOT NULL AUTO_INCREMENT,quizId INT(10) NOT NULL,PRIMARY KEY(id),FOREIGN KEY(quizId) REFERENCES quizlist(quizId) ON DELETE CASCADE)ENGINE = InnoDB");
+			$stmt->execute();
 		}
 		else
 		{
 			$msg = "
 			   <div class='alert alert-success'>
 			   <button class='close' data-dismiss='alert'>&times;</button>
-				  <strong>WoW !</strong>  Your Account is Already Activated : <a href='index.php'>Login here</a>
+				  <strong>Wow !</strong>  Your Account is Already Activated : <a href='index.php'>Login here</a>
 			   </div>
 			   ";
 	   }

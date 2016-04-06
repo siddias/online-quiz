@@ -4,12 +4,15 @@ session_start();
 require_once 'class.user.php';
 
 $user = new USER();
+if(!$user->is_logged_in() || $_SESSION['userType']!='T')
+	$user->redirect('index.php');
 
 if(isset($_POST['submit']) && $_POST['submit'] != "")
 {
     if(!isset($_POST['quizName']) || $_POST['quizName'] == "" ||
     !isset($_POST['duration']) || $_POST['duration'] == "" || !isset($_POST['sub']) || $_POST['sub'] == "" ||
-    !isset($_POST['startTime']) || $_POST['startTime'] == "" || !isset($_POST['endTime']) || $_POST['endTime'] == "")
+    !isset($_POST['startTime']) || $_POST['startTime'] == "" || !isset($_POST['endTime']) || $_POST['endTime'] == ""
+	|| !isset($_POST['num']) || $_POST['num'] == "")
     {
         echo "Sorry, important data to submit your question is missing. Please press back in your browser and try again and make sure you select a correct answer for the question.";
         exit();
@@ -17,14 +20,15 @@ if(isset($_POST['submit']) && $_POST['submit'] != "")
     try
     {
 
-        $stmt = $user->runQuery("INSERT INTO quizlist(userId,name,sub,duration,startTime,endTime)
-                                     VALUES(:uid,:name,:sub,:duration,:sTime,:eTime)");
+        $stmt = $user->runQuery("INSERT INTO quizlist(userId,name,sub,duration,startTime,endTime,numQuestions)
+                                     VALUES(:uid,:name,:sub,:duration,:sTime,:eTime,:num)");
         $stmt->bindparam(":uid",$_SESSION['userSession']);
         $stmt->bindparam(":name",$_POST['quizName']);
         $stmt->bindparam(":sub",$_POST['sub']);
         $stmt->bindparam(":duration",$_POST['duration']);
         $stmt->bindparam(":sTime",$_POST['startTime']);
         $stmt->bindparam(":eTime",$_POST['endTime']);
+		$stmt->bindparam(":num",$_POST['num']);
         $stmt->execute();
 
         $id = $user->lasdID();
@@ -34,14 +38,17 @@ if(isset($_POST['submit']) && $_POST['submit'] != "")
         $stmt = $user->runQuery("CREATE TABLE quiz".$id."_answers(aId INT(10) NOT NULL AUTO_INCREMENT,qId INT(10) NOT NULL,answer VARCHAR(100) NOT NULL,correct BOOLEAN, PRIMARY KEY(aId),FOREIGN KEY(qId) REFERENCES quiz".$id."_questions(qId) ON DELETE CASCADE)ENGINE = InnoDB");
         $stmt->execute();
 
-        $stmt = $user->runQuery("CREATE TABLE quiz".$id."_takers(userId INT(10) NOT NULL,PRIMARY KEY(userId),FOREIGN KEY(userId) REFERENCES members(userId) ON DELETE CASCADE)ENGINE = InnoDB");
+        $stmt = $user->runQuery("CREATE TABLE quiz".$id."_takers(id INT(10) NOT NULL AUTO_INCREMENT,userId INT(10) NOT NULL,taken BOOLEAN, score INT(10) NOT NULL,PRIMARY KEY(id),FOREIGN KEY(userId) REFERENCES members(userId) ON DELETE CASCADE)ENGINE = InnoDB");
         $stmt->execute();
     }
     catch(PDOException $ex)
     {
         echo $ex->getMessage();
+		exit();
     }
     $_SESSION['quizId']=$id;
+	$_SESSION['qno']=1;
+	$_SESSION['num']=$_POST['num'];
     header('location: addQuestions.php');
 }
 ?>
@@ -75,6 +82,7 @@ if(isset($_POST['submit']) && $_POST['submit'] != "")
             <label>Name of Quiz:&nbsp;<input type="text" name="quizName" required maxlength="50" /></label><br/>
             <label>Duration in minutes:&nbsp;<input type="number" name="duration" value="20" required /></label><br/>
             <label>Subject:&nbsp;<input type="text" name="sub" required maxlength="50"/></label><br/>
+			<label>Number of Questions&nbsp;<input type="number" name="num" value="20" required /></label><br/>
             <p>Start:<div class="container">
 
                 <div class='col-md-5' >
@@ -112,13 +120,13 @@ if(isset($_POST['submit']) && $_POST['submit'] != "")
     <script type="text/javascript">
         $(function() {
             $('#datetimepicker6').datetimepicker({
-                format: "YYYY-MM-DD hh:mm:ss",
+                format: "YYYY-MM-DD HH:mm",
                 ignoreReadonly: true,
                 useCurrent: false,
                 minDate: new Date()
             });
             $('#datetimepicker7').datetimepicker({
-                format: "YYYY-MM-DD hh:mm:ss",
+				format: "YYYY-MM-DD HH:mm",
                 ignoreReadonly: true,
                 useCurrent: false
             });
@@ -135,7 +143,7 @@ if(isset($_POST['submit']) && $_POST['submit'] != "")
         e.preventDefault();
     });
 </script>
-    </script>
+
 </body>
 
 </html>

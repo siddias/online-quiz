@@ -10,6 +10,7 @@ class USER
 	{
 		$database = new Database();
 		$db = $database->dbConnection();
+		$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		$this->conn = $db;
     }
 
@@ -63,6 +64,7 @@ class USER
 					if($userRow['pass']==md5($upass)) //hashes the password and checks for equality
 					{
 						$_SESSION['userSession'] = $userRow['userId']; //uid as session variable.uid is unique
+						$_SESSION['LAST_ACTIVITY'] = time();
 						return true;
 					}
 					else
@@ -91,8 +93,13 @@ class USER
 
 	public function is_logged_in()
 	{
-		if(isset($_SESSION['userSession']))
+		if (isset($_SESSION['userSession']) && isset($_SESSION['LAST_ACTIVITY']) && (time() - $_SESSION['LAST_ACTIVITY'] <= 1800)) {
+			$_SESSION['LAST_ACTIVITY'] = time();
 			return true;
+		}
+		else {
+			return false;
+		}
 	}
 
 	public function redirect($url)
@@ -103,7 +110,6 @@ class USER
 	public function logout()
 	{
 		session_destroy(); //end session
-		unset($_SESSION['userSession']); //remove previous uid
 	}
 
 	public function send_mail($email,$message,$subject)

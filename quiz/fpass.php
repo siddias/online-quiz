@@ -18,7 +18,7 @@ if(isset($_POST['btn-submit']))
 
 	if($stmt->rowCount() == 1) //if email id found in database
 	{
-		$id = base64_encode($row['userID']);
+		$id = base64_encode($row['userId']);
 		$code = md5(uniqid(rand()));
 
 		$stmt = $user->runQuery("UPDATE members SET tokenCode=:token WHERE email=:email"); //generate new token

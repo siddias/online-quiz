@@ -11,7 +11,7 @@ if(isset($_GET['id']) && isset($_GET['code'])) //if both are set
 	$id = base64_decode($_GET['id']); //decode id
 	$code = $_GET['code'];
 
-	$stmt = $user->runQuery("SELECT * FROM members WHERE userID=:uid AND tokenCode=:token");
+	$stmt = $user->runQuery("SELECT * FROM members WHERE userId=:uid AND tokenCode=:token");
 	$stmt->execute(array(":uid"=>$id,":token"=>$code));
 	$rows = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -32,8 +32,8 @@ if(isset($_GET['id']) && isset($_GET['code'])) //if both are set
 			else
 			{
 				$password = md5($cpass);
-				$stmt = $user->runQuery("UPDATE members SET pass=:upass WHERE userID=:uid");
-				$stmt->execute(array(":upass"=>$password,":uid"=>$rows['userID'])); //update password in database
+				$stmt = $user->runQuery("UPDATE members SET pass=:upass WHERE userId=:uid");
+				$stmt->execute(array(":upass"=>$password,":uid"=>$rows['userId'])); //update password in database
 
 				$msg = "<div class='alert alert-success'>
 						<button class='close' data-dismiss='alert'>&times;</button>
@@ -69,13 +69,13 @@ if(isset($_GET['id']) && isset($_GET['code'])) //if both are set
   <body id="login">
     <div class="container">
     	<div class='alert alert-success'>
-			<strong>Hello !</strong>  <?php echo $rows['userName'] ?> You are here to reset your forgotten password.
+			<strong>Hello !</strong>  <?php echo $rows['fname'] ?> You are here to reset your forgotten password.
 		</div>
         <form class="form-signin" method="post">
         <h3 class="form-signin-heading">Password Reset.</h3><hr />
         <?php
-			echo $msg;
 			if(isset($msg))
+				echo $msg;
 		?>
         <input type="password" class="input-block-level" placeholder="New Password" name="pass" required />
         <input type="password" class="input-block-level" placeholder="Confirm New Password" name="confirm-pass" required />

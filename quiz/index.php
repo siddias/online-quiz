@@ -14,7 +14,6 @@ if(isset($_POST['login']))
     $upass = trim($_POST['pwd']);
     if($user->login($email,$upass)); //checks valid user login. if yes then display homepage
         $user->redirect('home.php');
-
 }
 
 if(isset($_POST['signup'])) //when sign up form is submitted
@@ -161,11 +160,11 @@ if(isset($_GET['error'])) //redirected to index.php because of invalid sign in c
                     <div class="form-group">
                         <div class="col-sm-offset-3 col-sm-4">
                             <label class="radio-inline text-center">
-                                <input type="radio" name="type">Professor</label>
+                                <input type="radio" name="type" value="T">Professor</label>
                         </div>
                         <div class="col-sm-4">
                             <label class="radio-inline">
-                                <input type="radio" name="type" checked="checked">Student</label>
+                                <input type="radio" name="type" checked="checked" value="S">Student</label>
                         </div>
                     </div>
                     <div class="form-group">
