@@ -38,7 +38,7 @@ if(isset($_POST['submit']) && $_POST['submit'] != "")
         $stmt = $user->runQuery("CREATE TABLE quiz".$id."_answers(aId INT(10) NOT NULL AUTO_INCREMENT,qId INT(10) NOT NULL,answer VARCHAR(100) NOT NULL,correct BOOLEAN, PRIMARY KEY(aId),FOREIGN KEY(qId) REFERENCES quiz".$id."_questions(qId) ON DELETE CASCADE)ENGINE = InnoDB");
         $stmt->execute();
 
-        $stmt = $user->runQuery("CREATE TABLE quiz".$id."_takers(id INT(10) NOT NULL AUTO_INCREMENT,userId INT(10) NOT NULL,taken BOOLEAN, score INT(10) NOT NULL,PRIMARY KEY(id),FOREIGN KEY(userId) REFERENCES members(userId) ON DELETE CASCADE)ENGINE = InnoDB");
+        $stmt = $user->runQuery("CREATE TABLE quiz".$id."_takers(id INT(10) NOT NULL AUTO_INCREMENT,userId INT(10) NOT NULL,taken BOOLEAN, score INT(10) NOT NULL,submitTime DATETIME NOT NULL,PRIMARY KEY(id),FOREIGN KEY(userId) REFERENCES members(userId) ON DELETE CASCADE)ENGINE = InnoDB");
         $stmt->execute();
     }
     catch(PDOException $ex)

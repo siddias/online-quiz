@@ -33,6 +33,7 @@ if(isset($_POST["msg"])){
 }
 else {
 	try{
+		unset($_SESSION['qno']);
 		$stmt = $user->runQuery("SELECT userId,id,fname,lname,email from members WHERE userType='S' and verified='Y' ORDER BY id ASC");
 		$stmt->execute();
 		$result = $stmt->fetchAll(PDO::FETCH_ASSOC);

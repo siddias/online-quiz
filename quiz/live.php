@@ -31,7 +31,7 @@ catch(PDOException $ex){
     </script>
 <body class="wide comments example">
     <table id="example" border="2px" class="display" cellspacing="0" width="100%">
-		<caption>Select Students</caption>
+		<caption>LIVE QUIZZES</caption>
 		<thead>
 		<tr>
 			<th>SL No</th>

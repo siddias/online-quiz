@@ -38,5 +38,6 @@ $_SESSION['userType'] = $row['userType'];
 			}
 		?>
 		<a href="live.php">Live Quizes</a>
+		<a href="past.php">Past Quizes</a>
     </body>
 </html>
