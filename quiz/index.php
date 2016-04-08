@@ -97,8 +97,29 @@ if(isset($_GET['error'])) //redirected to index.php because of invalid sign in c
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/index.css">
+    <style>
+    body {
+
+    	background-size:cover;
+    	background-repeat: no-repeat;
+
+     }
+     .bound {
+         z-index: 0;
+         position:absolute;
+         margin-left:0px;
+         top:0px;
+         bottom:0px;
+         width:100%;
+         background: -webkit-linear-gradient(left, rgba(57, 66, 78,0.8), rgba(57, 66, 78,0.8)); /* For Safari 5.1 to 6.0 */
+         background: -o-linear-gradient(right, rgba(57, 66, 78,0.8), rgba(57, 66, 78,0.8)); /* For Opera 11.1 to 12.0 */
+         background: -moz-linear-gradient(right, rgba(57, 66, 78,0.8), rgba(57, 66, 78,0.8)); /* For Firefox 3.6 to 15 */
+         background: linear-gradient(to right, rgba(57, 66, 78,0.8), rgba(57, 66, 78,0.8));
+     }
+     </style>
 </head>
 <body>
+    <div class="bound"></div>
     <div class="container" style="width:40%;margin-top:10%;">
         <?php if(isset($msg)) echo $msg;  ?>
         <ul class="nav nav-tabs">
@@ -106,11 +127,11 @@ if(isset($_GET['error'])) //redirected to index.php because of invalid sign in c
             <li class="text-center" style="width:50%;"><a data-toggle="tab" href="#signup" style="border-width:3px 3px 0 0;border-color:#5795db">SIGN UP</a></li>
         </ul>
 
-        <div class="tab-content" style="background-color:#FFFFFF;border-bottom-right-radius:5px;border-bottom-left-radius:5px;border:3px solid #5795db;border-top-style: hidden">
-            <div id="login" class="tab-pane fade in active">
+        <div class="tab-content" style="position:relative;z-index:1;background-color:#FFFFFF;border-bottom-right-radius:5px;border-bottom-left-radius:5px;border:3px solid #5795db;border-top-style: hidden">
+            <div id="login" class="tab-pane fade in active" >
                 <form class="form-horizontal" role="form" method="post" >
                     <br/>
-                    <div class="form-group">
+                    <div class="form-group"  >
                         <div class="col-sm-offset-2 col-sm-8">
                             <input type="email" class="form-control" name="email" placeholder="Enter email" required>
                         </div>
@@ -188,6 +209,50 @@ if(isset($_GET['error'])) //redirected to index.php because of invalid sign in c
         if(typeof window.history.pushState == 'function') {
             window.history.pushState({}, "Hide", "index.php");
         }
+        var num;
+        var temp=0;
+        var speed=3000; /* this is set for 5 seconds, edit value to suit requirements */
+        var preloads=[];
+
+     /* add any number of images here */
+
+     preload(
+             'images/bg1.jpg',
+             'images/bg2.jpg',
+             'images/bg3.jpg',
+             'images/bg4.jpg',
+             'images/bg5.jpg'
+            );
+
+     function preload(){
+
+     for(var c=0;c<arguments.length;c++) {
+        preloads[preloads.length]=new Image();
+        preloads[preloads.length-1].src=arguments[c];
+       }
+      }
+
+     function rotateImages() {
+        num=Math.floor(Math.random()*preloads.length);
+     if(num==temp){
+        rotateImages();
+      }
+     else {
+        document.body.style.backgroundImage='url('+preloads[num].src+')';
+        temp=num;
+
+     setTimeout(function(){rotateImages()},speed);
+       }
+      }
+
+     if(window.addEventListener){
+        window.addEventListener('load',rotateImages,false);
+      }
+     else {
+     if(window.attachEvent){
+        window.attachEvent('onload',rotateImages);
+       }
+      }
     </script>
 </body>
 
