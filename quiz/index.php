@@ -97,30 +97,13 @@ if(isset($_GET['error'])) //redirected to index.php because of invalid sign in c
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/index.css">
-    <style>
-    body {
-
-    	background-size:cover;
-    	background-repeat: no-repeat;
-
-     }
-     .bound {
-         z-index: 0;
-         position:absolute;
-         margin-left:0px;
-         top:0px;
-         bottom:0px;
-         width:100%;
-         background: -webkit-linear-gradient(left, rgba(57, 66, 78,0.8), rgba(57, 66, 78,0.8)); /* For Safari 5.1 to 6.0 */
-         background: -o-linear-gradient(right, rgba(57, 66, 78,0.8), rgba(57, 66, 78,0.8)); /* For Opera 11.1 to 12.0 */
-         background: -moz-linear-gradient(right, rgba(57, 66, 78,0.8), rgba(57, 66, 78,0.8)); /* For Firefox 3.6 to 15 */
-         background: linear-gradient(to right, rgba(57, 66, 78,0.8), rgba(57, 66, 78,0.8));
-     }
-     </style>
 </head>
 <body>
+  <div class="logo">
+    <img alt="Quiz-It" src="images/Qi-logo.png">
+  </div>
     <div class="bound"></div>
-    <div class="container" style="width:40%;margin-top:10%;">
+    <div class="container" style="width:40%;">
         <?php if(isset($msg)) echo $msg;  ?>
         <ul class="nav nav-tabs">
             <li class="active text-center" style="width:50%;"><a data-toggle="tab" href="#login" style="border-width:3px 0 0 3px;border-color:#5795db">LOGIN</a></li>
