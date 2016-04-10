@@ -117,6 +117,7 @@ function markUnmarkQues()
   else
 	{
 		b.className="btn btn-default btn-lg";
+		b.focus();
 		document.getElementById("center").innerHTML="Flag";
 	}
 }
