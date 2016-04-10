@@ -11,15 +11,19 @@
   <script type="text/javascript" src="panel.js"></script>
 
 <style type="text/css">
-	a {font-size:0.75em; text-decoration:none; }
+
+/*	a {font-size:0.75em; text-decoration:none; }
 	a:link { text-decoration: none; }
 	a:visited { text-decoration: none; }
 	a:hover { text-decoration: none; }
 	a:active { text-decoration: none; }
-	div.scroll { width:15%; overflow:scroll; float:left; }
+*/
+	div.scroll { width:15%; overflow:auto; float:left; }
 	div.main	{ //code to center everything..  }
-	div.mainContent	{ float:left; margin-left:20px; line-height:2; }
-	div#quiz_menu	{ border:1px solid #000; width:500px; }
+	div.mainContent	{ float:left; margin-left:20px; line-height:3; width:75%; }
+	#left { width: 29%;}
+	#center { width: 39%; }
+	#right { width: 29%; }
 </style>
 
 </head>
@@ -37,8 +41,10 @@
   </div>
 
   <div class="mainContent">
-	<div id="quiz_meny">Quiz Menu..</div>
-	<div id="ques">Space to display Questions..</div> 
+	<button type="button" class="btn btn-primary" id="left" onclick="prevQues()">Previous question</button>
+	<button type="button" class="btn btn-primary" id="center" onclick="markUnmarkQues()">Flag</button>
+	<button type="button" class="btn btn-primary" id="right" onclick="nextQues()">Next question</button>
+	<div class="ques" id="ques1">Space to display Questions..</div> 
   </div>
  
   </div>
