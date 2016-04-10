@@ -8,10 +8,25 @@ function init()
  var pad = "";
  for(var i=1;i<=nod;i++)
 	pad+="0";
- for(var i=1;i<=Math.ceil(limit/2);i++)
-	addButtonElement("panel1", pad.substring(0, pad.length - (""+i).length) + i );
- for(var i=Math.ceil(limit/2)+1;i<=limit;i++)
-	addButtonElement("panel2", pad.substring(0, pad.length - (""+i).length) + i );
+ for(var i=1;i<=limit;i++)
+	{
+		if(i%2==1)
+			addButtonElement("panel1", pad.substring(0, pad.length - (""+i).length) + i );
+		else
+			addButtonElement("panel2", pad.substring(0, pad.length - (""+i).length) + i );
+
+	}
+ if(limit%2==1)
+	{
+	var ni = document.getElementById("panel2");
+	var newdiv = document.createElement('button');
+	newdiv.setAttribute('id',"hidden");
+	newdiv.setAttribute("type", "button");
+	newdiv.setAttribute("class", "btn btn-default btn-lg");
+	newdiv.setAttribute("style", "visibility:hidden");
+	newdiv.innerHTML =""+pad;
+	ni.appendChild(newdiv);
+	}
  document.getElementById('button1').click();
  document.getElementById('button1').focus();
 }
