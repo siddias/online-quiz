@@ -19,7 +19,7 @@
 	a:active { text-decoration: none; }
 */
 	div.scroll { width:15%; overflow:auto; float:left; }
-	div.main	{ //code to center everything..  }
+	div.main	{ visibility:hidden;  }
 	div.mainContent	{ float:left; margin-left:20px; line-height:3; width:75%; }
 	#left { width: 29%;}
 	#center { width: 39%; }
@@ -33,7 +33,7 @@
   <h2>Quiz Name</h2>
   <h2> Menu bar </h2>
 
-  <div class="main">
+  <div class="main" id="main">
 
   <div class="scroll" id="scrollbar">
   <div class="btn-group-vertical" id="panel1">	</div>
@@ -43,8 +43,8 @@
   <div class="mainContent">
 	<button type="button" class="btn btn-primary" id="left" onclick="prevQues()">Previous question</button>
 	<button type="button" class="btn btn-primary" id="center" onclick="markUnmarkQues()">Flag</button>
-	<button type="button" class="btn btn-primary" id="right" onclick="nextQues()">Next question</button>
-	<div class="ques" id="ques1">Space to display Questions..</div> 
+	<button type="button" class="btn btn-primary" id="right" onclick="nextQues()">Next Question</button>
+	<div id="ques">Space to display Questions..</div> 
   </div>
  
   </div>
