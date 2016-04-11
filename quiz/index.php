@@ -103,7 +103,7 @@ if(isset($_GET['error'])) //redirected to index.php because of invalid sign in c
     <img alt="Quiz-It" src="images/Qi-logo.png">
   </div>
     <div class="bound"></div>
-    <div class="container" style="width:40%;">
+    <div class="container" style="width:40%; margin-top:2%; ">
         <?php if(isset($msg)) echo $msg;  ?>
         <ul class="nav nav-tabs">
             <li class="active text-center" style="width:50%;"><a data-toggle="tab" href="#login" style="border-width:3px 0 0 3px;border-color:#5795db">LOGIN</a></li>
