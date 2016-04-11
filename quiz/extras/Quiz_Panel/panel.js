@@ -1,4 +1,4 @@
-var limit,current;
+var limit,current,prev;
 function init()
 {
  limit=Number(prompt("Enter number of buttons to be placed",""));
@@ -30,6 +30,7 @@ function init()
 	ni.appendChild(newdiv);
 	}
  current=1;
+ prev=1;
  document.getElementById('button1').click();
  document.getElementById('button1').focus();
 }
@@ -80,11 +81,13 @@ function quesDiv()
   {
 	  document.getElementById("left").className="btn btn-primary disabled";
 	  document.getElementById("right").innerHTML="Next Question";
+	  document.getElementById("right").onclick=nextQues;
   }
   else if(current==limit)
   {
 		document.getElementById("right").onclick=sendData;
 		document.getElementById("right").innerHTML="Submit";
+		document.getElementById("left").className="btn btn-primary";
   }
   else
   {
@@ -96,7 +99,7 @@ function quesDiv()
 	document.getElementById("center").innerHTML="Flag";
   else
 	document.getElementById("center").innerHTML="Unflag";
-  
+  prev=current;
 /*var newdiv = document.createElement('button');
   var divIdName = 'nextQues'+( Number(i) + 1 );
   newdiv.setAttribute('id',divIdName);
