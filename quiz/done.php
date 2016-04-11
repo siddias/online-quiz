@@ -91,7 +91,7 @@ else {
 	</script>
 </head>
 <body class="wide comments example">
-    <table id="example" class="display" cellspacing="0" width="100%">
+    <table id="example" class="display cell-border" cellspacing="0" width="100%">
 		<caption>Select Students</caption>
 		<thead>
 		<tr>

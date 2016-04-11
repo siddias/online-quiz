@@ -32,12 +32,8 @@ if(isset($_POST['signup'])) //when sign up form is submitted
 
 	if($stmt->rowCount() > 0)
 	{
-		$msg = "
-		      <div class='alert alert-warning'>
-				<button class='close' data-dismiss='alert'>&times;</button>
-					<strong>Sorry !</strong>  email allready exists , Please Try another one
-			  </div>
-			  ";
+		$msg = "Email-id Already Exists! Please Try Another One";
+        $mType = "error";
 	}
 	else
 	{
@@ -61,31 +57,25 @@ if(isset($_POST['signup'])) //when sign up form is submitted
 			$subject = "Confirm Registration";
 
 			$user->send_mail($email,$message,$subject);
-			$msg = "
-					<div class='alert alert-success'>
-						<button class='close' data-dismiss='alert'>&times;</button>
-						<strong>Success!</strong>  We've sent an email to $email.
-                    Please click on the confirmation link in the email to create your account.
-			  		</div>
-					"; //confirmation message to show user
+			$msg = "We've sent an email to $email. Please click on the confirmation link in the email to create your account."; //confirmation message to show user
+            $mType = "success";
 		}
 		else //if some error occurs while executing query
-			echo "ERROR!";
-	}
+		{
+            $msg = "Error occured! Please try again";
+            $mType = "error";
+        }
+    }
 }
 if(isset($_GET['inactive'])) //redirected to index.php because account not activated
 {
-    $msg="<div class='alert alert-danger'>
-        <button class='close' data-dismiss='alert'>&times;</button>
-        <strong>Sorry!</strong> This Account is not Activated Go to your Inbox and Activate it.
-    </div>";
+    $msg = "This Account is not Activated Go to your Inbox and Activate it.";
+    $mType = "warning";
 }
 if(isset($_GET['error'])) //redirected to index.php because of invalid sign in credentials
 {
-  $msg="<div class='alert alert-danger'>
-      <button class='close' data-dismiss='alert' >&times;</button>
-      <strong>Wrong Details!</strong>
-      </div>";
+  $msg = "Invalid username or password!";
+  $mType = "error";
 }
 ?>
 
@@ -97,14 +87,30 @@ if(isset($_GET['error'])) //redirected to index.php because of invalid sign in c
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="lobibox/dist/css/lobibox.min.css" />
+     <script src="js/jquery-1.12.1.min.js"></script>
+     <script src="lobibox/dist/js/lobibox.min.js"></script>
+     <script src="lobibox/dist/js/messageboxes.min.js"></script>
 </head>
 <body>
-  <div class="logo">
-    <img alt="Quiz-It" src="images/Qi-logo.png">
-  </div>
+    <?php
+        if(isset($msg))
+        {
+    ?>
+        <script>
+            var t = "<?php echo $mType?>";
+            var m = "<?php echo $msg?>";
+            Lobibox.alert(t, { msg: m});
+        </script>
+    <?php
+    }
+    ?>
+    <div class="logo">
+        <img alt="Quiz-It" src="images/Qi-logo.png">
+    </div>
     <div class="bound"></div>
-    <div class="container" style="width:40%; margin-top:2%; ">
-        <?php if(isset($msg)) echo $msg;  ?>
+    <div class="container" style="width:40%; margin-top:2%;">
+
         <ul class="nav nav-tabs">
             <li class="active text-center" style="width:50%;"><a data-toggle="tab" href="#login" style="border-width:3px 0 0 3px;border-color:#5795db">LOGIN</a></li>
             <li class="text-center" style="width:50%;"><a data-toggle="tab" href="#signup" style="border-width:3px 3px 0 0;border-color:#5795db">SIGN UP</a></li>
@@ -186,7 +192,6 @@ if(isset($_GET['error'])) //redirected to index.php because of invalid sign in c
             </div>
         </div>
     </div>
-    <script src="js/jquery-1.12.1.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script>
         if(typeof window.history.pushState == 'function') {

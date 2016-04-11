@@ -45,7 +45,7 @@ catch(PDOException $ex){
 				$i=1;
 				foreach($result as $row){
 			?>
-					<tr onclick="window.location='quiz.php?id=<?=$row['quizId']?>'">
+					<tr onclick="window.location='qValidate.php?id=<?=$row['quizId']?>'">
 						<td><?=$i?></td>
 						<a><td><?=$row['name']?></td></a>
 						<td><?=$row['sub']?></td>
