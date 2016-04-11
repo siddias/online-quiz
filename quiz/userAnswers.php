@@ -41,7 +41,7 @@ if(isset($_POST)){
 					break;
 				}
 		}
-		echo "Your answers have been submitted\nYou scored ".$score."/".$SESSION['num'];
+		echo "Your answers have been submitted\nYou scored ".$score."/".$_SESSION['num'];
 
 		$stmt = $user->runQuery("INSERT INTO past_quiz".$id."(quizId,score) VALUES ($quizId,$score)");
 		$stmt->execute();
