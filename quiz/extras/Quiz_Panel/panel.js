@@ -1,7 +1,9 @@
-var limit;
+var limit,current;
 function init()
 {
  limit=Number(prompt("Enter number of buttons to be placed",""));
+ document.getElementById("main").style.visibility="visible";
+ document.getElementById("left").className="btn btn-primary disabled";
  var nod=(""+limit).length;
  if(Math.ceil(limit/2)>12)
 	document.getElementById("scrollbar").style.height=37+"em";
@@ -27,6 +29,7 @@ function init()
 	newdiv.innerHTML =""+pad;
 	ni.appendChild(newdiv);
 	}
+ current=1;
  document.getElementById('button1').click();
  document.getElementById('button1').focus();
 }
@@ -69,15 +72,31 @@ function addButtonElement(panel, num)
 
 function quesDiv()
 {
-  var ni = document.getElementsByClassName("ques");
+  var ni = document.getElementById("ques");
   var i = this.id.substring( this.id.search(/\d/) );
-  ni[0].innerHTML="Question Number "+Number(i)+"<br/>";
-  ni[0].id="ques"+Number(i);
+  current=Number(i);
+  ni.innerHTML="Question Number "+current+"<br/>";
+  if(current==1)
+  {
+	  document.getElementById("left").className="btn btn-primary disabled";
+	  document.getElementById("right").innerHTML="Next Question";
+  }
+  else if(current==limit)
+  {
+		document.getElementById("right").onclick=sendData;
+		document.getElementById("right").innerHTML="Submit";
+  }
+  else
+  {
+	document.getElementById("left").className="btn btn-primary";
+ 	document.getElementById("right").onclick=nextQues;
+	document.getElementById("right").innerHTML="Next Question";
+  }
   if(this.className.search("btn btn-default") == 0 )
 	document.getElementById("center").innerHTML="Flag";
   else
 	document.getElementById("center").innerHTML="Unflag";
-
+  
 /*var newdiv = document.createElement('button');
   var divIdName = 'nextQues'+( Number(i) + 1 );
   newdiv.setAttribute('id',divIdName);
@@ -94,36 +113,45 @@ function quesDiv()
 
 function nextQues()
 {
-  var ni = document.getElementsByClassName("ques");
-  var i = ni[0].id.substring( ni[0].id.search(/\d/) );
-  if( (i=Number(i)+1) > limit)
+		document.getElementById("left").className="btn btn-primary";
+  if( current == limit)
 	{
-		alert("This is the Last Question!!");
-		i--;
+		document.getElementById("right").onclick=sendData;
+		document.getElementById("right").click();
 	}
-  document.getElementById('button'+i).click();
-  document.getElementById('button'+i).focus();
+  
+  else if( (current+=1) == limit)
+	{
+		document.getElementById("right").innerHTML="Submit";
+	}
+	else
+	{
+		document.getElementById("right").onclick=nextQues;
+		document.getElementById("right").innerHTML="Next Question";
+	}
+  document.getElementById('button'+current).click();
+  document.getElementById('button'+current).focus();
 }
 
 function prevQues()
 {
-  var ni = document.getElementsByClassName("ques");
-  var i = ni[0].id.substring( ni[0].id.search(/\d/) );
-  if( (i=Number(i)-1) < 1)
+  if( current == limit)
 	{
-		alert("This is the First Question!!");
-		i++;
+		document.getElementById("right").onclick=nextQues;
+		document.getElementById("right").innerHTML="Next Question";
 	}
-  document.getElementById('button'+i).click();
-  document.getElementById('button'+i).focus();
+  if( (current-=1) == 1)
+	{
+		document.getElementById("left").className="btn btn-primary disabled";
+	}
+  document.getElementById('button'+current).click();
+  document.getElementById('button'+current).focus();
 }
 
 
 function markUnmarkQues()
 {
-  var ni = document.getElementsByClassName("ques");
-  var i = ni[0].id.substring( ni[0].id.search(/\d/) );
-  var b=document.getElementById("button"+Number(i));
+  var b=document.getElementById("button"+current);
   if(b.className.search("btn btn-default") == 0 )
 	{
 		b.className="btn btn-warning btn-lg";
@@ -135,4 +163,9 @@ function markUnmarkQues()
 		b.focus();
 		document.getElementById("center").innerHTML="Flag";
 	}
+}
+
+function sendData()
+{
+	alert(this.id);
 }
