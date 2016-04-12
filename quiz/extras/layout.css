@@ -5,8 +5,9 @@ body{
   position: relative;;
   width:80%;
   background-color:#ffffff;
-  min-height: 550px;
+  min-height: 600px;
   z-index:1;
+  margin-top: -20px;
 }
 .footer {
   position:relative;;
