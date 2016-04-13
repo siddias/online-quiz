@@ -52,90 +52,60 @@ if(isset($_POST['submit']) && $_POST['submit'] != "")
     header('location: addQuestions.php');
 }
 ?>
-
-
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <title>Set-Quiz</title>
-    <link charset="utf-8">
 
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+    <link charset="utf-8">
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/bootstrap-datetimepicker.min.css" />
+    <link rel="stylesheet" href="css/layout.css" />
 
-    <style>
-        .classForm{
-            margin-top: 48px;
-            margin-left: auto;
-            margin-right: auto;
-            width: 780px;
-            border:5px solid;
-            padding: 10px;
-            width:50%;
-        }
-	#footer {
-	position:relative;
-	bottom:0;
-	margin-top:2%;
-	width:100%;
-	padding: 15px 10px;
-	background: #272f35;
-	min-height: 60px;
-	padding-top: 10px;
-	z-index: 1;
-	}
-	.navbar {
-	padding: 0;
-	transition: background 0.5s ease-in-out 0s, padding 5.5s ease-in-out 0s;
-	line-height: 2px;
-	padding: 4px;
-	font-size:20px;
-	min-height: 60px;
-	}
-    </style>
+
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery-1.12.1.min.js"></script>
+
+
 </head>
 
-<body style="background-color: #d6d6c2;">
+<body>
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#"><img alt="Quiz-It!" src="images/Qi-logo.png"></a>
+            </div>
+            <div class="collapse navbar-collapse" id="myNavbar">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="#"><span class="glyphicon glyphicon-home"></span></a></li>
+                    <li><a href="live.php">Live Quiz</a></li>
+                    <li><a href="past.php">Dead Quiz</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-user"></span>User <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Edit Profile</a></li>
+                            <li><a href="logout.php">Sign Out</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 
-<nav class="navbar navbar-inverse">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>                        
-      </button>
-   
-    </div>
-    <div class="collapse navbar-collapse" id="myNavbar">
-	<div class="wo">
-      <ul class="nav navbar-nav">
-        <li class="active"><a href="#">  Home   </a></li>
-         <li ><a href="#"> Live Quiz</a></li>
-        <li><a href="#"> Past Quiz</a></li>
-        
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li class="dropdown">
-		  <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-user"></span><span class="caret"></span> </a>
-		   <ul class="dropdown-menu"style="background-color:#d6d6c2;">
-            <li style="text-align:center;min-height:25px;padding-bottom: 5px;"><a  href="#">Edit profile</a></li>
-            <li style="text-align:center;min-height:25px;padding-bottom: 5px;"><a href="#">Register</a></li>
-            <li style="text-align:center;min-height:25px;padding-bottom: 5px;"><a href="logout.php">signout</a></li>
-          </ul>
-        </li>
-        
-      </ul>
-	  </div>
-    </div>
-  </div>
-</nav>
 
-    <div class="classForm">
+    <div class="stuff">
         <form action="setQuiz.php" method="POST">
             <label>Name of Quiz:&nbsp;<input type="text" name="quizName" required maxlength="50" /></label><br/>
             <label>Duration in minutes:&nbsp;<input type="number" name="duration" value="20" required /></label><br/>
@@ -172,14 +142,10 @@ if(isset($_POST['submit']) && $_POST['submit'] != "")
         </form>
     </div>
 
-  <div id="footer">
-      <span class="a" style="padding:40px;">   <a href="#"> HOME</a></span> 
-	   <span class="a" style="padding:40px;">   <a href="#"> CONTACT</a></span> 
-	   <span class="a" style="padding:40px;">   <a href="#"> ABOUT</a></span> 
-	   <span class="a" style="padding:40px;">   <a href="#"> REGISTER</a></span> 
-            </div>
-            <!-- End Footer -->
-        </div>
+    </div>
+    <div class="footer">
+    </div>
+
 
     <script src="js/moment.min.js"></script>
     <script src="js/jquery-2.2.1.min.js"></script>
