@@ -24,11 +24,10 @@ a {
     z-index: 1;
     margin: auto;
     width: 200px;
-    height: 200px;
     margin-top: 0.3%;
 }
 img{
-  width: 280px;
+  width: 200px;
 }
 .nav-tabs {
     border-bottom: 0px solid #fff

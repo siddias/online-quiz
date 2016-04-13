@@ -109,7 +109,7 @@ if(isset($_GET['error'])) //redirected to index.php because of invalid sign in c
         <img alt="Quiz-It" src="images/Qi-logo.png">
     </div>
     <div class="bound"></div>
-    <div class="container" style="width:40%; margin-top:1%;">
+    <div class="container" style="width:40%;">
 
         <ul class="nav nav-tabs">
             <li class="active text-center" style="width:50%;"><a data-toggle="tab" href="#login" style="border-width:3px 0 0 3px;border-color:#5795db">LOGIN</a></li>
@@ -165,6 +165,11 @@ if(isset($_GET['error'])) //redirected to index.php because of invalid sign in c
                     <div class="form-group">
                         <div class="col-sm-offset-2 col-sm-8">
                             <input type="password" class="form-control" name="pwd" placeholder="Enter password"  required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-8">
+                            <input type="password" class="form-control" name="cpwd" placeholder="Confirm password"  required>
                         </div>
                     </div>
                     <div class="form-group">
