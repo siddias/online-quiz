@@ -103,27 +103,20 @@ if(isset($_GET['err'])) //redirected to index.php because of invalid sign in cre
      <script src="lib/lobibox/js/messageboxes.min.js"></script>
     <script src="lib/bootstrap/js/bootstrap.min.js"></script>
     <script>
-        function check_loop()
+        function check_loop(event)
           {
             var p1 = document.getElementById("pass");
             var p2 = document.getElementById("confirm-pass");
             if( p1.value.search(p2.value) != 0 )
-              {
-                var temp=document.getElementById("not-matching");
-                if(temp==null)
-                {
-                  var newdiv = document.createElement('div');
-                  newdiv.setAttribute('id',"not-matching");
-                  newdiv.style.color="red";
-                  newdiv.style.margin="0 0 0 30%";
-                  newdiv.innerHTML ="Password mismatch!!";
-                  document.getElementById("myDiv").appendChild(newdiv);
-                }
+            {
                 event.preventDefault();
-              }
+                p2.setCustomValidity('Passwords not matching!');
+                return false;
+            }
             else
             {
-              document.getElementById('myDiv').removeChild(document.getElementById("not-matching"));
+                  p2.setCustomValidity('');
+                  return true;
             }
           }
     </script>
@@ -154,7 +147,7 @@ if(isset($_GET['err'])) //redirected to index.php because of invalid sign in cre
 
         <div class="tab-content" style="position:relative;z-index:1;background-color:#FFFFFF;border-bottom-right-radius:5px;border-bottom-left-radius:5px;border:3px solid #5795db;border-top-style: hidden">
             <div id="login" class="tab-pane fade in active" >
-                <form class="form-horizontal" onsubmit="check_loop()" role="form" method="post" >
+                <form class="form-horizontal" role="form" method="post" >
                     <br/>
                     <div class="form-group"  >
                         <div class="col-sm-offset-2 col-sm-8">
@@ -181,7 +174,7 @@ if(isset($_GET['err'])) //redirected to index.php because of invalid sign in cre
             </div>
 
             <div id="signup" class="tab-pane fade">
-                <form class="form-horizontal" role="form" method="post" onsubmit="check_loop()">
+                <form class="form-horizontal" role="form" method="post" onsubmit="check_loop(event)">
                     <br/>
                     <div class="form-group">
                         <div class="col-sm-offset-2 col-sm-8">
@@ -195,7 +188,7 @@ if(isset($_GET['err'])) //redirected to index.php because of invalid sign in cre
                     </div>
                     <div class="form-group">
                         <div class="col-sm-offset-2 col-sm-8">
-                            <input type="email" class="form-control" name="email" placeholder="Enter email"required>
+                            <input type="email" class="form-control" name="email" placeholder="Enter email" required>
                         </div>
                     </div>
                     <div class="form-group">
@@ -204,8 +197,8 @@ if(isset($_GET['err'])) //redirected to index.php because of invalid sign in cre
                         </div>
                     </div>
                     <div class="form-group">
-                        <div class="col-sm-offset-2 col-sm-8" id="myDiv">
-                            <input type="password" class="form-control" name="cpwd" placeholder="Confirm password" id="confirm-pass" onkeyup="check_loop()" required>
+                        <div class="col-sm-offset-2 col-sm-8">
+                            <input type="password" class="form-control" name="cpwd" placeholder="Confirm password" id="confirm-pass" required>
                         </div>
                     </div>
                     <div class="form-group">
