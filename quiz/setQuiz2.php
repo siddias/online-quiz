@@ -141,8 +141,7 @@ if(isset($_POST['submit']) && $_POST['submit'] != "")
             <input type="submit" name="submit" value="Create Quiz" />
         </form>
     </div>
-
-    </div>
+    
     <div class="footer">
     </div>
 
