@@ -2,86 +2,44 @@
 <html lang="en">
 
 <head>
-    <title>Bootstrap Case</title>
+    <title>Forgot Password</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-    <style type="text/css">
-        #footer {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            padding: 15px 10px;
-            background: #272f35;
-            min-height: 60px;
-            padding-top: 10px;
-            z-index: 1;
-        }
-        
-        .navbar {
-            padding: 0;
-            transition: background 0.5s ease-in-out 0s, padding 5.5s ease-in-out 0s;
-            line-height: 2px;
-            padding: 4px;
-            font-size: 20px;
-            min-height: 60px;
-        }
-    </style>
+    <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="lib/lobibox/css/lobibox.min.css" />
+    <script src="lib/jquery/jquery.min.js"></script>
+    <script src="lib/lobibox/js/lobibox.min.js"></script>
+    <script src="lib/lobibox/js/messageboxes.min.js"></script>
+    <script src="lib/bootstrap/js/bootstrap.min.js"></script>
 </head>
 
-<body style="background-color: #d6d6c2;" ;>
-    <h2>Quiz it</h2>
+<body>
+    <form class="pure-form">
+        <fieldset>
+            <legend>Confirm password with HTML5</legend>
 
-    <nav class="navbar navbar-inverse">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
+            <input type="password" placeholder="Password" id="password" required>
+            <input type="password" placeholder="Confirm Password" id="confirm_password" required>
 
-            </div>
-            <div class="collapse navbar-collapse" id="myNavbar">
-                <div class="wo">
-                    <ul class="nav navbar-nav">
-                        <li class="active"><a href="#">  Home   </a></li>
-                        <li><a href="#"> Live Quiz</a></li>
-                        <li><a href="#"> Past Quiz</a></li>
+            <button type="submit" class="pure-button pure-button-primary">Confirm</button>
+        </fieldset>
+    </form>
+    <script>
+        var password = document.getElementById("password"),
+            confirm_password = document.getElementById("confirm_password");
 
-                    </ul>
-                    <ul class="nav navbar-nav navbar-right">
-                        <li class="dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-user"></span><span class="caret"></span> </a>
-                            <ul class="dropdown-menu" style="background-color:#d6d6c2;">
-                                <li style="text-align:center;min-height:25px;padding-bottom: 5px;"><a href="#">Edit profile</a></li>
-                                <li style="text-align:center;min-height:25px;padding-bottom: 5px;"><a href="#">Register</a></li>
-                                <li style="text-align:center;min-height:25px;padding-bottom: 5px;"><a href="#">signout</a></li>
-                            </ul>
-                        </li>
+        function validatePassword() {
+            if (password.value != confirm_password.value) {
+                confirm_password.setCustomValidity("Passwords Don't Match");
+            } else {
+                confirm_password.setCustomValidity('');
+            }
+        }
 
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </nav>
-
-    <div class="container">
-        <h3>	QUIZ IT</h3>
-        <p>This is an online quiz platform, where students can take online quiz in teqhnical subjects.
-            <p>Students can see their results and correct answers to all questions.</p>
-    </div>
-    <div id="footer">
-        <span class="a" style="padding:40px;">   <a href="#"> HOME</a></span>
-        <span class="a" style="padding:40px;">   <a href="#"> CONTACT</a></span>
-        <span class="a" style="padding:40px;">   <a href="#"> ABOUT</a></span>
-        <span class="a" style="padding:40px;">   <a href="#"> REGISTER</a></span>
-    </div>
-    <!-- End Footer -->
-    </div>
-
+        password.onchange = validatePassword;
+        confirm_password.onkeyup = validatePassword;
+    </script>
 </body>
 
 </html>

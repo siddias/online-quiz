@@ -45,7 +45,8 @@ class USER
 		}
 		catch(PDOException $ex)
 		{
-			echo $ex->getMessage();
+			header("Location: index.php?err"); //redirect to index page with error as not found
+			exit;
 		}
 	}
 
@@ -81,13 +82,14 @@ class USER
 			}
 			else
 			{
-				header("Location: index.php?error"); //redirect to index page with error as not found
+				header("Location: index.php?err"); //redirect to index page with error as not found
 				exit;
 			}
 		}
 		catch(PDOException $ex)
 		{
-			echo $ex->getMessage();
+			header("Location: index.php?err"); //redirect to index page with error as not found
+			exit;
 		}
 	}
 
@@ -109,12 +111,13 @@ class USER
 
 	public function logout()
 	{
+		unset($_SESSION['userSession']);
 		session_destroy(); //end session
 	}
 
 	public function send_mail($email,$message,$subject)
 	{
-		require_once('mailer/class.phpmailer.php');
+		require_once('lib/mailer/class.phpmailer.php');
 		$mail = new PHPMailer();
 		$mail->IsSMTP();
 		$mail->SMTPDebug  =0;
@@ -124,11 +127,11 @@ class USER
 		$mail->Port       = 587;
 		$mail->AddAddress($email);
 		$mail->Username="bmscequizit@gmail.com"; //determines which email id the mail is sent from
-		$mail->Password="bmsce1234";
+		$mail->Password="bmsce123";
 		$mail->SetFrom("bmscequizit@gmail.com","Quiz-It");
 		$mail->AddReplyTo("bmscequizit@gmail.com","Quiz-It");
 		$mail->Subject  = $subject;
 		$mail->MsgHTML($message); //construct body of message from html
-			$mail->Send(); //send message
+		$mail->Send(); //send message
 	}
 }

@@ -51,11 +51,11 @@ else {
     <meta http-equiv="Content-type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Done</title>
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.11/css/jquery.dataTables.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.1.2/css/select.dataTables.min.css">
-    <script type="text/javascript" language="javascript" src="//code.jquery.com/jquery-1.12.0.min.js"></script>
-    <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>
-    <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/select/1.1.2/js/dataTables.select.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="lib/dataTables/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" type="text/css" href="lib/dataTables/css/select.dataTables.min.css">
+    <script type="text/javascript" language="javascript" src="lib/jquery/jquery.min.js"></script>
+    <script type="text/javascript" language="javascript" src="lib/dataTables/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" language="javascript" src="lib/dataTables/js/dataTables.select.min.js"></script>
     <script>
         $(document).ready(function() {
             $('#example').DataTable({

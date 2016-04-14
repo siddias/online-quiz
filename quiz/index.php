@@ -56,9 +56,14 @@ if(isset($_POST['signup'])) //when sign up form is submitted
 
 			$subject = "Confirm Registration";
 
-			$user->send_mail($email,$message,$subject);
-			$msg = "We've sent an email to $email. Please click on the confirmation link in the email to create your account."; //confirmation message to show user
-            $mType = "success";
+            try{
+                $user->send_mail($email,$message,$subject);
+                $msg = "We've sent an email to $email. Please click on the confirmation link in the email to create your account."; //confirmation message to show user
+                $mType = "success";
+            }catch(phpmailerException $e){
+                $msg = "There was an error sending email. Please try again";
+                $mType = "error";
+            }
 		}
 		else //if some error occurs while executing query
 		{
@@ -77,6 +82,11 @@ if(isset($_GET['error'])) //redirected to index.php because of invalid sign in c
   $msg = "Invalid username or password!";
   $mType = "error";
 }
+if(isset($_GET['err'])) //redirected to index.php because of invalid sign in credentials
+{
+    $msg = "Error occured! Please try again";
+    $mType = "error";
+}
 ?>
 
 <!DOCTYPE html>
@@ -85,12 +95,13 @@ if(isset($_GET['error'])) //redirected to index.php because of invalid sign in c
     <title>Login | Quiz-It</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/index.css">
-    <link rel="stylesheet" href="lobibox/dist/css/lobibox.min.css" />
-     <script src="js/jquery-1.12.1.min.js"></script>
-     <script src="lobibox/dist/js/lobibox.min.js"></script>
-     <script src="lobibox/dist/js/messageboxes.min.js"></script>
+    <link rel="stylesheet" href="lib/lobibox/css/lobibox.min.css" />
+     <script src="lib/jquery/jquery.min.js"></script>
+     <script src="lib/lobibox/js/lobibox.min.js"></script>
+     <script src="lib/lobibox/js/messageboxes.min.js"></script>
+    <script src="lib/bootstrap/js/bootstrap.min.js"></script>
 </head>
 <body>
     <?php
@@ -197,7 +208,6 @@ if(isset($_GET['error'])) //redirected to index.php because of invalid sign in c
             </div>
         </div>
     </div>
-    <script src="js/bootstrap.min.js"></script>
     <script>
         if(typeof window.history.pushState == 'function') {
             window.history.pushState({}, "Hide", "index.php");

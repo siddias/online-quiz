@@ -60,9 +60,9 @@ else {
                 cursor: pointer;
             }
     </style>
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-	<script src="js/jquery-1.12.1.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css">
+	<script src="lib/jquery/js/jquery.min.js"></script>
+    <script src="lib/bootstrap/js/bootstrap.min.js"></script>
 	<script>
 	var q = <?php echo json_encode($arr, JSON_PRETTY_PRINT) ?>;
 	var prev, current;
@@ -307,13 +307,3 @@ else {
 </body>
 
 </html>
-<!--timer, question,answers,prev,next,finish
-<div id="content">
-	<div id="timer"></div>
-	<div id="question"></div>
-	<div id="answers"></div>
-	<button id="prev" style="display:none" onclick="showQuestion(-1,true)">Prev</button>
-	<button id="next" style="display:none" onclick="showQuestion(1,true)">Next</button>
-	<button id="finish" style="display:none" onclick="sendData()">Finish</button>
-</div>
--->

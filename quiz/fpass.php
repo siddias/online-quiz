@@ -8,9 +8,9 @@ $user = new USER();
 if($user->is_logged_in())
 	$user->redirect('home.php');
 
-if(isset($_POST['btn-submit']))
+if(isset($_POST['reset']))
 {
-	$email = $_POST['txtemail'];
+	$email = $_POST['email'];
 
 	$stmt = $user->runQuery("SELECT * FROM members WHERE email=:email LIMIT 1");
 	$stmt->execute(array(":email"=>$email));
@@ -18,41 +18,44 @@ if(isset($_POST['btn-submit']))
 
 	if($stmt->rowCount() == 1) //if email id found in database
 	{
-		$id = base64_encode($row['userId']);
-		$code = md5(uniqid(rand()));
+		if($row['verified']=='Y'){
+			$id = base64_encode($row['userId']);
+			$code = md5(uniqid(rand()));
+			$stmt = $user->runQuery("UPDATE members SET tokenCode=:token WHERE email=:email"); //generate new token
+			$stmt->execute(array(":token"=>$code,"email"=>$email));
 
-		$stmt = $user->runQuery("UPDATE members SET tokenCode=:token WHERE email=:email"); //generate new token
-		$stmt->execute(array(":token"=>$code,"email"=>$email));
+			$u = $row['fname'];
+			//password reset message
+			$message= "
+					   Hello $u,
+					   <br /><br />
+					   We got requested to reset your password, if you do this then just click the following link to reset your password, if not just ignore                   this email,
+					   <br /><br />
+					   Click Following Link To Reset Your Password
+					   <br /><br />
+					   <a href='http://localhost/quiz/resetpass.php?id=$id&code=$code'>Click here to reset your password</a>
+					   <br /><br />
+					   thank you :)
+					   ";
+			$subject = "Password Reset";
 
-		$u = $row['fname'];
-		//password reset message
-		$message= "
-				   Hello $u,
-				   <br /><br />
-				   We got requested to reset your password, if you do this then just click the following link to reset your password, if not just ignore                   this email,
-				   <br /><br />
-				   Click Following Link To Reset Your Password
-				   <br /><br />
-				   <a href='http://localhost/quiz/resetpass.php?id=$id&code=$code'>Click here to reset your password</a>
-				   <br /><br />
-				   thank you :)
-				   ";
-		$subject = "Password Reset";
-
-		$user->send_mail($email,$message,$subject);
-
-		$msg = "<div class='alert alert-success'>
-					<button class='close' data-dismiss='alert'>&times;</button>
-					We've sent an email to $email.
-                    Please click on the password reset link in the email to generate new password.
-			  	</div>"; //message to be displayed to user
+			try{
+				$user->send_mail($email,$message,$subject);
+				$msg = "We've sent an email to $email.Please click on the password reset link in the email to generate new password."; //message to be displayed to user
+				$mType = "success";
+			}catch(phpmailerException $e){
+				$msg = "There was an error sending email. Please try again";
+				$mType = "error";
+			}
+		}
+		else {
+			$msg = "Your Account has not been verified! Cannot reset password"; //message to be displayed to user
+			$mType = "error";
+		}
 	}
-	else
-	{
-		$msg = "<div class='alert alert-danger'>
-					<button class='close' data-dismiss='alert'>&times;</button>
-					<strong>Sorry!</strong>  this email not found.
-			    </div>"; //email id not found
+	else{
+		$msg = "Email id is not registered on Quiz-It!";
+		$mType = "error";
 	}
 }
 ?>
@@ -60,35 +63,104 @@ if(isset($_POST['btn-submit']))
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>Forgot Password</title>
-	<meta charset="utf-8">
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/bootstrap-responsive.min.css" rel="stylesheet">
-    <link href="css/styles.css" rel="stylesheet">
+    <title>Forgot Password</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="lib/lobibox/css/lobibox.min.css" />
+     <script src="lib/jquery/jquery.min.js"></script>
+     <script src="lib/lobibox/js/lobibox.min.js"></script>
+     <script src="lib/lobibox/js/messageboxes.min.js"></script>
+    <script src="lib/bootstrap/js/bootstrap.min.js"></script>
 </head>
-<body id="login">
-	<div class="container">
-      <form class="form-signin" method="post">
-        <h2 class="form-signin-heading">Forgot Password</h2><hr />
-    	<?php
-			if(isset($msg))
-				echo $msg;
-			else
-			{
-		?>
-          		<div class='alert alert-info'>
-					Please enter your email address. You will receive a link to create a new password via email.!
-				</div>
-        <?php
-			}
-		?>
-        <input type="email" class="input-block-level" placeholder="Email address" name="txtemail" required />
- 		<hr />
-        <button class="btn btn-danger btn-primary" type="submit" name="btn-submit">Generate new Password</button>
-		<a href="index.php" style="float:right;"class="btn ">Sign In</a><hr />
-      </form>
+<body>
+    <?php
+        if(isset($msg))
+        {
+    ?>
+        <script>
+            var t = "<?php echo $mType?>";
+            var m = "<?php echo $msg?>";
+            Lobibox.alert(t, { msg: m});
+        </script>
+    <?php
+    }
+    ?>
+    <div class="logo">
+        <img alt="Quiz-It" src="images/Qi-logo.png">
     </div>
-    <script src="js/jquery-1.12.1.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
+    <div class="bound"></div>
+    <div class="container" style="width:40%;">
+        <div style="position:relative;z-index:1;background-color:#FFFFFF;border-bottom-right-radius:5px;border-bottom-left-radius:5px;border:3px solid #5795db;">
+			<div id="signup">
+				<div style="text-align: center; font-size: 20px" class='alert alert-info'>
+							Please enter your email address. You will receive a link to create a new password via email.
+				</div>
+				<br />
+                <form class="form-horizontal" role="form" method="post">
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-8">
+                            <input type="email" class="form-control" name="email" placeholder="Enter email"required>
+                        </div>
+                    </div>
+				<br/>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-8">
+                            <input type="submit" name="reset" value="Reset Password" class="btn btn-primary btn-block">
+                        </div>
+                    </div>
+                    <br/>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        var num;
+        var temp=0;
+        var speed=3000; /* this is set for 5 seconds, edit value to suit requirements */
+        var preloads=[];
+
+     /* add any number of images here */
+
+     preload(
+             'images/bg1.jpg',
+             'images/bg2.jpg',
+             'images/bg3.jpg',
+             'images/bg4.jpg',
+             'images/bg5.jpg'
+            );
+
+     function preload(){
+
+     for(var c=0;c<arguments.length;c++) {
+        preloads[preloads.length]=new Image();
+        preloads[preloads.length-1].src=arguments[c];
+       }
+      }
+
+     function rotateImages() {
+        num=Math.floor(Math.random()*preloads.length);
+     if(num==temp){
+        rotateImages();
+      }
+     else {
+        document.body.style.backgroundImage='url('+preloads[num].src+')';
+        temp=num;
+
+     setTimeout(function(){rotateImages()},speed);
+       }
+      }
+
+     if(window.addEventListener){
+        window.addEventListener('load',rotateImages,false);
+      }
+     else {
+     if(window.attachEvent){
+        window.attachEvent('onload',rotateImages);
+       }
+      }
+    </script>
 </body>
+
 </html>

@@ -1,0 +1,31 @@
+body{
+  background-color: #d6d6c2;
+}
+.stuff{
+  position: relative;;
+  width:80%;
+  background-color:#ffffff;
+  min-height: 600px;
+  z-index:1;
+  margin-top: -20px;
+}
+.footer {
+  position:relative;;
+  bottom:0;
+  width:100%;
+  margin-top: -0.5%;
+  padding: 15px 10px;
+  background: #272f35;
+  min-height: 80px;
+  padding-top: 10px;
+  z-index: 0;
+}
+
+img{
+  width: 50px;
+  margin-top: -12px;
+}
+
+label {
+    cursor: pointer;
+}

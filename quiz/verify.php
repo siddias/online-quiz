@@ -18,7 +18,7 @@ if(isset($_GET['id']) && isset($_GET['code']))
 	$stmt->execute(array(":uID"=>$id,":code"=>$code));
 	$row=$stmt->fetch(PDO::FETCH_ASSOC);
 
-	if($stmt->rowCount() > 0)
+	if($stmt->rowCount() == 1)
 	{
 		if($row['verified']==$statusN)
 		{
@@ -27,12 +27,9 @@ if(isset($_GET['id']) && isset($_GET['code']))
 			$stmt->bindparam(":uID",$id);
 			$stmt->execute();
 
-			$msg = "
-		           <div class='alert alert-success'>
-				   <button data-dismiss='alert'>&times;</button>
-					  <strong>Wow !</strong>  Your Account is Now Activated : <a href='index.php'>Login here</a>
-			       </div>
-			       ";
+			$msg = "Your Account is Now Activated!";
+			$mType = "success";
+
 			if($row['userType']=='S'){
 				$stmt = $user->runQuery("CREATE TABLE past_quiz".$id."(id INT(10) NOT NULL AUTO_INCREMENT,quizId INT(10) NOT NULL,score INT(10) NOT NULL,PRIMARY KEY(id),FOREIGN KEY(quizId) REFERENCES quizlist(quizId) ON DELETE CASCADE)ENGINE = InnoDB");
 				$stmt->execute();
@@ -46,39 +43,51 @@ if(isset($_GET['id']) && isset($_GET['code']))
 		}
 		else
 		{
-			$msg = "
-			   <div class='alert alert-success'>
-			   <button class='close' data-dismiss='alert'>&times;</button>
-				  <strong>Wow !</strong>  Your Account is Already Activated : <a href='index.php'>Login here</a>
-			   </div>
-			   ";
-	   }
+			$msg = "Your Account is Already Activated";
+			$mType = "info";
+	   	}
 	}
 	else
 	{
-		$msg = "
-			   <div class='alert alert-'>
-			   <button class='close' data-dismiss='alert'>&times;</button>
-				  <strong>sorry !</strong>  Your Account is already Activated : <a href='index.php'>Login here</a>
-			   </div>
-			   ";
+		$msg = "Invalid verification link!";
+		$myType = "error";
 	}
 }
 
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html>
+
 <head>
-	<title>Confirm Registration</title>
 	<meta charset="utf-8">
-	<link href="css/bootstrap.min.css" rel="stylesheet">
-	<link href="css/styles.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Validate Quiz</title>
+
+	<link rel="stylesheet" href="lib/lobibox/css/lobibox.min.css" />
+
+	<script src="lib/jquery/jquery.min.js"></script>
+	<script src="lib/lobibox/js/lobibox.min.js"></script>
+	<script src="lib/lobibox/js/messageboxes.min.js"></script>
 </head>
+
 <body>
-	<div class="container">
-		<?php if(isset($msg)) { echo $msg; } ?>
-	</div>
-	<script src="js/jquery-1.12.1.min.js"></script>
-	<script src="js/bootstrap.min.js"></script>
+    <?php
+		if(isset($msg))
+		{
+	?>
+		<script>
+			var t = "<?php echo $mType?>";
+			var m = "<?php echo $msg?>";
+			Lobibox.alert(t,
+				{ msg: m,
+				callback: function(lobibox){
+					window.location="index.php";
+   				}
+			});
+		</script>
+	<?php
+		}
+ 	?>
 </body>
+
 </html>

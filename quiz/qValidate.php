@@ -72,10 +72,12 @@ else {
 	<meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Validate Quiz</title>
-	<link rel="stylesheet" href="lobibox/dist/css/lobibox.min.css" />
-	<script src="js/jquery-1.12.1.min.js"></script>
-	<script src="lobibox/dist/js/lobibox.min.js"></script>
-	<script src="lobibox/dist/js/messageboxes.min.js"></script>
+
+	<link rel="stylesheet" href="lib/lobibox/css/lobibox.min.css" />
+
+	<script src="lib/jquery/jquery.min.js"></script>
+	<script src="lib/lobibox/js/lobibox.min.js"></script>
+	<script src="lib/lobibox/js/messageboxes.min.js"></script>
 </head>
 
 <body>

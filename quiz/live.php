@@ -26,7 +26,7 @@ catch(PDOException $ex){
     <meta http-equiv="Content-type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Live-Quizes</title>
-    <script type="text/javascript" language="javascript" src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+    <script type="text/javascript" src="lib/jquery/jquery.min.js"></script>
     <script>
     </script>
 <body class="wide comments example">
