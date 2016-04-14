@@ -110,7 +110,7 @@ if(isset($_POST['submit']) && $_POST['submit'] != "")
             <label>Duration in minutes:&nbsp;<input type="number" name="duration" value="20" required /></label><br/>
             <label>Subject:&nbsp;<input type="text" name="sub" required maxlength="50"/></label><br/>
 			<label>Number of Questions&nbsp;<input type="number" name="num" value="20" required /></label><br/>
-            Start:<div class="container">
+            <p>Start:<div class="container">
 
                 <div class='col-md-5' >
                     <div class="form-group">
@@ -122,8 +122,9 @@ if(isset($_POST['submit']) && $_POST['submit'] != "")
                         </div>
                     </div>
                 </div>
+							</p>
             <p style="clear:both"></p>
-			End:
+	<p>		End:
                 <div class='col-md-5'>
                     <div class="form-group">
                         <div class='input-group date' id='datetimepicker7'>
@@ -135,6 +136,7 @@ if(isset($_POST['submit']) && $_POST['submit'] != "")
                     </div>
                 </div>
             </div>
+</p>
             <input type="submit" name="submit" value="Create Quiz" />
         </form>
     </div>
