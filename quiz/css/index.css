@@ -1,0 +1,57 @@
+body {
+
+  background-size:cover;
+  background-repeat: no-repeat;
+
+ }
+ .bound {
+     z-index: 0;
+     position:absolute;
+     margin-left:0px;
+     top:0px;
+     bottom:0px;
+     width:100%;
+     background: -webkit-linear-gradient(left, rgba(57, 66, 78,0.8), rgba(57, 66, 78,0.8)); /* For Safari 5.1 to 6.0 */
+     background: -o-linear-gradient(right, rgba(57, 66, 78,0.8), rgba(57, 66, 78,0.8)); /* For Opera 11.1 to 12.0 */
+     background: -moz-linear-gradient(right, rgba(57, 66, 78,0.8), rgba(57, 66, 78,0.8)); /* For Firefox 3.6 to 15 */
+     background: linear-gradient(to right, rgba(57, 66, 78,0.8), rgba(57, 66, 78,0.8));
+ }
+a {
+    outline: none !important;
+}
+.logo{
+    position: relative;
+    z-index: 1;
+    margin: auto;
+    width: 200px;
+    margin-top: 0.3%;
+}
+img{
+  width: 200px;
+}
+.nav-tabs {
+    border-bottom: 0px solid #fff
+}
+.nav-tabs>li {
+    float: left;
+    margin-bottom: -1px
+}
+.nav-tabs>li>a {
+    margin-right: 0px;
+    line-height: 1.42857143;
+    border: 0.5px solid transparent;
+    border-bottom-style: hidden;
+    border-radius: 5px 5px 0 0;
+    background-color: #e6e6e6;
+}
+.nav-tabs>li>a:hover {
+    border-color: #eee #eee #ddd
+}
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
+    margin-bottom: -1px;
+    color: #555;
+    cursor: default;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-bottom-color: transparent
+}
