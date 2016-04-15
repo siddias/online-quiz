@@ -56,6 +56,7 @@ if(isset($_POST)){
 		unset($_SESSION['qId']);
 		unset($_SESSION['started']);
 		unset($_SESSION['num']);
+		unset($_SESSION['valid']);
 	}catch(PDOException $ex){
 		echo $ex->getMessage();
 		exit();

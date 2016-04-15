@@ -109,7 +109,6 @@ if(isset($_GET['err'])) //redirected to index.php because of invalid sign in cre
             var p2 = document.getElementById("confirm-pass");
             if( p1.value.search(p2.value) != 0 )
             {
-                event.preventDefault();
                 p2.setCustomValidity('Passwords not matching!');
                 return false;
             }
@@ -174,7 +173,7 @@ if(isset($_GET['err'])) //redirected to index.php because of invalid sign in cre
             </div>
 
             <div id="signup" class="tab-pane fade">
-                <form class="form-horizontal" role="form" method="post" onsubmit="check_loop(event)">
+                <form class="form-horizontal" role="form" method="post" onsubmit="return check_loop(event)">
                     <br/>
                     <div class="form-group">
                         <div class="col-sm-offset-2 col-sm-8">
