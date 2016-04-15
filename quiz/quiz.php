@@ -230,7 +230,7 @@ else {
 		document.getElementById('answers').innerHTML = ans;
 
 		if (this.className.search("btn btn-warning btn-lg") == 0)
-			document.getElementById("center").innerHTML = "Flag";
+			document.getElementById("center").innerHTML = "Unflag";
 			else
 						{
 							document.getElementById("center").innerHTML = "Flag";
