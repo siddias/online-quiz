@@ -61,8 +61,12 @@ else {
             }
     </style>
     <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css">
-	<script src="lib/jquery/js/jquery.min.js"></script>
+	<link rel="stylesheet" href="lib/lobibox/css/lobibox.min.css" />
+
+	<script src="lib/jquery/jquery.min.js"></script>
     <script src="lib/bootstrap/js/bootstrap.min.js"></script>
+	<script src="lib/lobibox/js/lobibox.min.js"></script>
+	<script src="lib/lobibox/js/messageboxes.min.js"></script>
 	<script>
 	var q = <?php echo json_encode($arr, JSON_PRETTY_PRINT) ?>;
 	var prev, current;
@@ -90,13 +94,18 @@ else {
 			display.textContent = minutes + ":" + seconds;
 
 			if (diff == 0) {
-				alert("Your time is up!");
 				clearInterval(ob);
-				sendData();
+				Lobibox.alert("success",
+				{msg: "Time is up! Answers have been submitted",
+				callback: function(lobibox){
+					sendData();
+   				}
+			});
 			}
 
-			if (diff == 300)
-				alert("5 mins remaining!");
+			if (diff == 300){
+				Lobibox.alert("warning", { msg: "5 Minutes remaining!"});
+			}
 		};
 		// we don't want to wait a full second before the timer starts
 		timer();
@@ -115,9 +124,12 @@ else {
 		}
 		return false;
 	}
-
+	function showMessage(){
+			return "Your Quiz will end and Answers will be submitted!";
+	}
 	function init() {
 		prev=current=1;
+		document.getElementById("bdy").addEventListener("beforeunload",showMessage);
 		document.getElementById("main").style.visibility = "visible";
 		document.getElementById("left").className = "btn btn-primary disabled";
 		var nod = ("" + limit).length;
@@ -147,18 +159,6 @@ else {
 		document.getElementById('button1').click();
 		document.getElementById('button1').focus();
 		startTimer(<?php echo ($_SESSION['duration']*60) ?>, document.getElementById("timer"));
-	}
-
-	function addButtonElement(panel, num) {
-		var ni = document.getElementById(panel);
-		var newdiv = document.createElement('button');
-		var divIdName = 'button' + Number(num);
-		newdiv.setAttribute('id', divIdName);
-		newdiv.setAttribute("type", "button");
-		newdiv.setAttribute("class", "btn btn-default btn-lg");
-		newdiv.onclick = quesDiv;
-		newdiv.innerHTML = num + " ";
-		ni.appendChild(newdiv);
 	}
 
 	function addButtonElement(panel, num) {
@@ -213,6 +213,7 @@ else {
 
 		ni.innerHTML = "Question Number " + current + "<br/>" + q[current - 1]['question'];
 		document.getElementById('answers').innerHTML = ans;
+
 		if (this.className.search("btn btn-default") == 0)
 			document.getElementById("center").innerHTML = "Flag";
 		else
@@ -270,16 +271,16 @@ else {
 			data: aIds, //no need to call JSON.stringify etc... jQ does this for you
 			cache: false,
 			success: function(response) { //check response: it's always good to check server output when developing...
-				alert(response);
+				Lobibox.alert("sucess",response);
+				document.getElementById("bdy").removeEventListener("beforeunload",showMessage);
 				window.location = "past.php";
 			}
 		});
 	}
     </script>
-
 </head>
 
-<body onload="init()">
+<body id="bdy" onload="init()" onbeforeunload="return showMessage()">
 
     <div class="container">
         <h2><?php echo $_SESSION['qName']?></h2>
