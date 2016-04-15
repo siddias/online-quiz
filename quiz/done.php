@@ -91,14 +91,14 @@ else {
 	</script>
 </head>
 <body class="wide comments example">
-    <table id="example" class="display cell-border" cellspacing="0" width="100%">
+    <table id="example" class="display cell-border hover compact stripe" cellspacing="0" width="100%" style="border:1px solid rgb(200, 205, 199); border-top-style:none;">
 		<caption>Select Students</caption>
 		<thead>
-		<tr>
-			<th>ID</th>
-			<th>First Name</th>
-			<th>Last Name</th>
-			<th>Email Id</th>
+		<tr style="background-color:rgb(87, 95, 101); ">
+			<th style="border:1px solid rgb(200, 205, 199)">ID</th>
+			<th style="border:1px solid rgb(200, 205, 199)">First Name</th>
+			<th style="border:1px solid rgb(200, 205, 199)">Last Name</th>
+			<th style="border:1px solid rgb(200, 205, 199)">Email Id</th>
 		</tr>
 		</thead>
 		<tbody>
