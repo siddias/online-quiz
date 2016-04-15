@@ -179,7 +179,7 @@ else {
 			k, ans = "";
 		var i = this.id.substring(this.id.search(/\d/));
 		current = Number(i);
-
+		var prev_b = document.getElementById("button" + prev);
 		if (current == 1) {
 			document.getElementById("left").className = "btn btn-primary disabled";
 			document.getElementById("right").innerHTML = "Next Question";
@@ -196,7 +196,22 @@ else {
 
 		checked = check();
 		if (checked != false)
-			aIds[q[prev - 1]['qId']] = checked;
+		{
+			aIds[q[prev - 1]['qId']] = checked;					aIds[q[prev - 1]['qId']] = checked;
+					if (! (prev_b.className.search("btn btn-warning btn-lg") == 0 ) )
+					{
+						prev_b.className = "btn btn-success btn-lg";
+						prev_b.focus();
+					}
+				}
+				else
+				{
+					if (! (prev_b.className.search("btn btn-warning btn-lg") == 0 ) )
+					{
+						prev_b.className = "btn btn-danger btn-lg";
+						prev_b.focus();
+					}
+				}
 
 		if (aIds[q[current - 1]['qId']] != undefined)
 			k = aIds[q[current - 1]['qId']];
@@ -214,11 +229,14 @@ else {
 		ni.innerHTML = "Question Number " + current + "<br/>" + q[current - 1]['question'];
 		document.getElementById('answers').innerHTML = ans;
 
-		if (this.className.search("btn btn-default") == 0)
+		if (this.className.search("btn btn-warning btn-lg") == 0)
 			document.getElementById("center").innerHTML = "Flag";
-		else
-			document.getElementById("center").innerHTML = "Unflag";
-
+			else
+						{
+							document.getElementById("center").innerHTML = "Flag";
+							this.className = "btn btn-primary btn-lg";
+							this.focus();
+						}
 		prev = current;
 	}
 
@@ -252,13 +270,17 @@ else {
 
 	function markUnmarkQues() {
 		var b = document.getElementById("button" + current);
-		if (b.className.search("btn btn-default") == 0) {
-			b.className = "btn btn-warning btn-lg";
-			document.getElementById("center").innerHTML = "Unflag";
-		} else {
-			b.className = "btn btn-default btn-lg";
+		if (b.className.search("btn btn-warning btn-lg") == 0)
+		{
+			b.className = "btn btn-primary btn-lg";
 			b.focus();
 			document.getElementById("center").innerHTML = "Flag";
+		}
+		else
+		{
+			b.className = "btn btn-warning btn-lg";
+			b.focus();
+			document.getElementById("center").innerHTML = "Unflag";
 		}
 	}
 
