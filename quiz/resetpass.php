@@ -70,6 +70,25 @@ if(isset($_GET['id']) && isset($_GET['code'])) //if both are set
     <script src="lib/lobibox/js/lobibox.min.js"></script>
     <script src="lib/lobibox/js/messageboxes.min.js"></script>
     <script src="lib/bootstrap/js/bootstrap.min.js"></script>
+		<script>
+				function check_loop(event)
+					{
+						var p1 = document.getElementById("pass");
+						var p2 = document.getElementById("confirm-pass");
+						if( p1.value.search(p2.value) != 0 )
+						{
+								event.preventDefault();
+								p2.setCustomValidity('Passwords not matching!');
+								return false;
+						}
+						else
+						{
+									p2.setCustomValidity('');
+									return true;
+						}
+					}
+		</script>
+
 </head>
 
 <body>
@@ -98,7 +117,7 @@ if(isset($_GET['id']) && isset($_GET['code'])) //if both are set
                             Reset Password
                         </div>
                         <br />
-                        <form class="form-horizontal" role="form" method="post">
+                        <form class="form-horizontal" role="form" method="post" onsubmit="check_loop(event)">
                             <div class="form-group">
                                 <div class="col-sm-offset-2 col-sm-8">
                                     <input type="password" class="form-control" name="pass" id="pass" placeholder="Enter Password" required>
