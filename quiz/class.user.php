@@ -95,13 +95,18 @@ class USER
 
 	public function is_logged_in()
 	{
-		if (isset($_SESSION['userSession']) && isset($_SESSION['LAST_ACTIVITY']) && (time() - $_SESSION['LAST_ACTIVITY'] <= 1800)) {
-			$_SESSION['LAST_ACTIVITY'] = time();
-			return true;
+		if (isset($_SESSION['userSession']) && isset($_SESSION['LAST_ACTIVITY'])){
+				if(time() - $_SESSION['LAST_ACTIVITY'] <= 1800){
+						$_SESSION['LAST_ACTIVITY'] = time();
+						return true;
+				}
+				else{
+					logout();
+					return false;
+				}
 		}
-		else {
+		else
 			return false;
-		}
 	}
 
 	public function redirect($url)

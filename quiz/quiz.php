@@ -69,7 +69,7 @@ else {
 	<script src="lib/lobibox/js/messageboxes.min.js"></script>
 	<script>
 	var q = <?php echo json_encode($arr, JSON_PRETTY_PRINT) ?>;
-	var prev, current;
+	var prev, current,stat=false;
 	var aIds = {};
 	var limit = <?php echo $_SESSION['num'] ?>;
 
@@ -125,11 +125,11 @@ else {
 		return false;
 	}
 	function showMessage(){
-			return "Your Quiz will end and Answers will be submitted!";
+			if(stat==false)
+				return "Your Quiz will end and Answers will be submitted!";
 	}
 	function init() {
 		prev=current=1;
-		document.getElementById("bdy").addEventListener("beforeunload",showMessage);
 		document.getElementById("main").style.visibility = "visible";
 		document.getElementById("left").className = "btn btn-primary disabled";
 		var nod = ("" + limit).length;
@@ -197,7 +197,7 @@ else {
 		checked = check();
 		if (checked != false)
 		{
-			aIds[q[prev - 1]['qId']] = checked;					aIds[q[prev - 1]['qId']] = checked;
+			aIds[q[prev - 1]['qId']] = checked;
 					if (! (prev_b.className.search("btn btn-warning btn-lg") == 0 ) )
 					{
 						prev_b.className = "btn btn-success btn-lg";
@@ -284,18 +284,25 @@ else {
 		}
 	}
 
-	function sendData() {
-		document.getElementById('button' + current).click();
-		document.getElementById('button' + current).focus();
+	function submitAnswers(){
+		stat = true;
 		$.ajax({
 			type: "POST",
 			url: "userAnswers.php",
 			data: aIds, //no need to call JSON.stringify etc... jQ does this for you
 			cache: false,
 			success: function(response) { //check response: it's always good to check server output when developing...
-				Lobibox.alert("sucess",response);
-				document.getElementById("bdy").removeEventListener("beforeunload",showMessage);
+				Lobibox.alert("sucess",{msg:response});
 				window.location = "past.php";
+			}
+		});
+	}
+	function sendData() {
+		document.getElementById('button' + current).click();
+		Lobibox.confirm({msg:"Are you sure you want to submit the quiz?",
+		callback: function(lobibox,type){
+			if (type === 'yes')
+				submitAnswers();
 			}
 		});
 	}

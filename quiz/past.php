@@ -8,7 +8,7 @@ if(!$user->is_logged_in())
 	$user->redirect('index.php');
 
 try{
-	$id = $_SESSION['userSession'];
+	$id = $_SESSION['userId'];
 	$stmt = $user->runQuery("SELECT q.quizId,name,sub,score from quizlist q,past_quiz".$id." p WHERE q.quizId=p.quizId");
 	$stmt->execute();
 	$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -25,7 +25,7 @@ catch(PDOException $ex){
 <head>
     <meta http-equiv="Content-type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Live-Quizes</title>
+    <title>Past-Quizes</title>
     <script type="text/javascript" src="lib/jquery/jquery.min.js"></script>
     <script>
     </script>
@@ -35,6 +35,7 @@ catch(PDOException $ex){
 		<thead>
 		<tr>
 			<th>SL No</th>
+			<th>Date</th>
 			<th>Quiz Name</th>
 			<th>Subject</th>
 			<th>Score</th>
