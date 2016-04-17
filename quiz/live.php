@@ -1,7 +1,7 @@
 <?php
 session_start();
 require_once 'class.user.php';
-
+require_once 'updates.php';
 $user = new USER();
 
 if(!$user->is_logged_in())
@@ -9,20 +9,22 @@ if(!$user->is_logged_in())
 
 try{
 	$id = $_SESSION['userSession'];
-	$stmt = $user->runQuery("SELECT q.quizId,name,sub,duration,startTime,endTime from quizlist q,live_quiz".$id." l WHERE q.quizId=l.quizId");
-	$stmt->execute();
-	$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
+	if($_SESSION['userType']=='S'){
+		$stmt = $user->runQuery("SELECT q.quizId,name,sub,startTime from quizlist q,live_quiz".$id." l WHERE q.quizId=l.quizId");
+		$stmt->execute();
+		$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+	}
+	else {
+		$stmt = $user->runQuery("SELECT q.quizId,name,sub,duration,startTime,endTime,numQuizTakers,l.numSubmissions from quizlist q,live_quiz".$id." l WHERE q.quizId=l.quizId");
+		$stmt->execute();
+		$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+	}
 	if($stmt->rowCount()==0){
-		$msg = "No live quizzes at the moment!";
+		$msg = "No Live Quizzes At The Moment!";
         $mType = "info";
 	}
-	/*if($_SESSION['userType']=='T'){
-		$stmt = $user->runQuery("SELECT  from quizlist q,live_quiz".$id." l WHERE q.quizId=l.quizId");
-		$stmt->execute();
-	}*/
-}
-catch(PDOException $ex){
+
+}catch(PDOException $ex){
 	echo $ex->getMessage();
 	exit();
 }
@@ -149,8 +151,9 @@ catch(PDOException $ex){
 						<td><?=$row['name']?></td>
 						<td><?=$row['sub']?></td>
 						<td><?=$row['duration']?></td>
-						<td><a href='qValidate.php?id=<?=$row['quizId']?>'>Take Quiz</td>
-					</tr>
+						<td><?=$row['numSubmissions']?>&#47;<?=$row['numQuizTakers']?></td>
+						<td><a href='editQuiz.php?id=<?=$row['quizId']?>'>Edit Quiz</td>
+					<tr/>
 			<?php
 				$i++;
 				}

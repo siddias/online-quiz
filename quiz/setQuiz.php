@@ -38,7 +38,7 @@ if(isset($_POST['submit']) && $_POST['submit'] != "")
         $stmt = $user->runQuery("CREATE TABLE quiz".$id."_answers(aId INT(10) NOT NULL AUTO_INCREMENT,qId INT(10) NOT NULL,answer VARCHAR(100) NOT NULL,correct BOOLEAN, PRIMARY KEY(aId),FOREIGN KEY(qId) REFERENCES quiz".$id."_questions(qId) ON DELETE CASCADE)ENGINE = InnoDB");
         $stmt->execute();
 
-        $stmt = $user->runQuery("CREATE TABLE quiz".$id."_takers(id INT(10) NOT NULL AUTO_INCREMENT,userId INT(10) NOT NULL,taken BOOLEAN, score INT(10) NOT NULL,submitTime DATETIME NOT NULL,PRIMARY KEY(id),FOREIGN KEY(userId) REFERENCES members(userId) ON DELETE CASCADE)ENGINE = InnoDB");
+        $stmt = $user->runQuery("CREATE TABLE quiz".$id."_takers(id INT(10) NOT NULL AUTO_INCREMENT,userId INT(10) NOT NULL,taken BOOLEAN, score INT(10) NOT NULL DEFAULT 0,submitTime DATETIME NOT NULL,PRIMARY KEY(id),FOREIGN KEY(userId) REFERENCES members(userId) ON DELETE CASCADE)ENGINE = InnoDB");
         $stmt->execute();
     }
     catch(PDOException $ex)
@@ -73,105 +73,134 @@ if(isset($_POST['submit']) && $_POST['submit'] != "")
     <script src="lib/datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
 </head>
 
+
 <body>
-    <nav class="navbar navbar-inverse">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="#"><img alt="Quiz-It!" src="images/Qi-logo.png"></a>
-            </div>
-            <div class="collapse navbar-collapse" id="myNavbar">
-                <ul class="nav navbar-nav">
-                    <li ><a href="home.php"><span class="glyphicon glyphicon-home"></span></a></li>
-                    <li><a href="live.php">Live Quiz</a></li>
-                    <li><a href="past.php">Dead Quiz</a></li>
-                </ul>
+	<nav class="navbar navbar-inverse">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="#"><img alt="Quiz-It!" src="images/Qi-logo.png"></a>
+			</div>
+			<div class="collapse navbar-collapse" id="myNavbar">
+				<ul class="nav navbar-nav">
+					<li ><a href="home.php"><span class="glyphicon glyphicon-home"></span></a></li>
+					<li><a href="live.php">Live Quiz</a></li>
+					<li><a href="past.php">Past Quiz</a></li>
+				</ul>
 				<ul class="nav navbar-nav navbar-right">
-                    <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-user"></span>&nbsp;<?php echo $_SESSION['fname']?><span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="#">Edit Profile</a></li>
-                            <li><a href="logout.php">Sign Out</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+					<li class="dropdown">
+						<a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-user"></span>&nbsp;<?php echo $_SESSION['fname']?><span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							<li><a href="#">Edit Profile</a></li>
+							<li><a href="logout.php">Sign Out</a></li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</nav>
 
 
-    <div class="container stuff">
-        <form action="setQuiz.php" method="POST">
-            <label>Name of Quiz:&nbsp;<input type="text" name="quizName" required maxlength="50" /></label><br/>
-            <label>Duration in minutes:&nbsp;<input type="number" name="duration" value="20" required /></label><br/>
-            <label>Subject:&nbsp;<input type="text" name="sub" required maxlength="50"/></label><br/>
-			<label>Number of Questions&nbsp;<input type="number" name="num" value="20" required /></label><br/>
-            <p>Start:<div class="container">
+	<div class="container stuff">
+		<h2 class="text-center">Enter Quiz details</h2><br/>
 
-                <div class='col-md-5' >
-                    <div class="form-group">
-                        <div class='input-group date' id='datetimepicker6'>
-                            <input type='text' class="form-control readonly" name="startTime" required  />
-                            <span class="input-group-addon">
-                    <span class="glyphicon glyphicon-calendar"></span>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-							</p>
-            <p style="clear:both"></p>
-	<p>		End:
-                <div class='col-md-5'>
-                    <div class="form-group">
-                        <div class='input-group date' id='datetimepicker7'>
-                            <input type='text' class="form-control" name="endTime" required />
-                            <span class="input-group-addon">
-                    <span class="glyphicon glyphicon-calendar"></span>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-</p>
-            <input type="submit" name="submit" value="Create Quiz" />
-        </form>
-    </div>
-    <div class="footer">
-    </div>
+		<form action="setQuiz.php" method="POST" class="form-horizontal" role="form">
 
-    <script type="text/javascript">
-        $(function() {
-            $('#datetimepicker6').datetimepicker({
-                format: "YYYY-MM-DD HH:mm",
-                ignoreReadonly: true,
-                useCurrent: false,
-				defaultDate: new Date(),
-                minDate: new Date()
-            });
-            $('#datetimepicker7').datetimepicker({
-				format: "YYYY-MM-DD HH:mm",
-                ignoreReadonly: true,
-                useCurrent: false,
-				defaultDate: new Date(),
-				minDate:new Date()
-            });
-            $("#datetimepicker6").on("dp.change", function(e) {
-                $('#datetimepicker7').data("DateTimePicker").minDate(e.date);
-            });
-            $("#datetimepicker7").on("dp.change", function(e) {
-                $('#datetimepicker6').data("DateTimePicker").maxDate(e.date);
-            });
-        });
-    </script>
-    <script>
-    $(".readonly").keydown(function(e){
-        e.preventDefault();
-    });
-</script>
+			<div class="form-group">
+				<label class="control-label col-sm-offset-1 col-sm-3" for="quizName">Name of Quiz:</label>
+				<div class="col-sm-5">
+					<input type="text" class="form-control" name="quizName" id="qname" required maxlength="50" />
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="control-label col-sm-offset-1 col-sm-3" for="duration">Duration in minutes:</label>
+				<div class="col-sm-5">
+					<input type="number" class="form-control" name="duration" value="20" required />
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="control-label col-sm-offset-1 col-sm-3" for="sub">Subject:</label>
+				<div class="col-sm-5">
+					<input type="text" class="form-control" name="sub" id="subject" required maxlength="50"/>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="control-label col-sm-offset-1 col-sm-3" for="num">Number of Questions:</label>
+				<div class="col-sm-5">
+					<input type="number" class="form-control" name="num" id="noq" value="20" required />
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="control-label col-sm-offset-1 col-sm-3" for="startTime">Start:</label>
+				<div class='col-sm-5' >
+					<div class='input-group date' id='datetimepicker6'>
+						<input type='text' class="form-control readonly" name="startTime" required  />
+						<span class="input-group-addon">
+							<span class="glyphicon glyphicon-calendar"></span>
+						</span>
+					</div>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="control-label col-sm-offset-1 col-sm-3" for="endTime">End:</label>
+				<div class='col-sm-5'>
+					<div class='input-group date' id='datetimepicker7'>
+						<input type='text' class="form-control readonly" name="endTime" required />
+						<span class="input-group-addon">
+							<span class="glyphicon glyphicon-calendar"></span>
+						</span>
+					</div>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<div class="col-sm-offset-4 col-sm-4">
+					<input type="submit" name="submit" value="Create Quiz" class="btn btn-primary btn-block">
+				</div>
+			</div>
+		</form>
+	</div>
+	<div class="footer">
+	</div>
+
+	<script type="text/javascript">
+	$(function() {
+		$('#datetimepicker6').datetimepicker({
+			format: "YYYY-MM-DD HH:mm",
+			ignoreReadonly: true,
+			useCurrent: false,
+			defaultDate: new Date(),
+			minDate: new Date()
+		});
+		$('#datetimepicker7').datetimepicker({
+			format: "YYYY-MM-DD HH:mm",
+			ignoreReadonly: true,
+			useCurrent: false,
+			defaultDate: new Date(),
+			minDate:new Date()
+		});
+		$("#datetimepicker6").on("dp.change", function(e) {
+			$('#datetimepicker7').data("DateTimePicker").minDate(e.date);
+		});
+		$("#datetimepicker7").on("dp.change", function(e) {
+			$('#datetimepicker6').data("DateTimePicker").maxDate(e.date);
+		});
+	});
+	</script>
+	<script>
+	$(".readonly").keydown(function(e){
+		e.preventDefault();
+	});
+	</script>
 
 </body>
 

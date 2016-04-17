@@ -10,15 +10,18 @@ if(!$user->is_logged_in())
 if(isset($_POST["msg"])){
 	$qId = $_SESSION['quizId'];
 	try {
-			for($i=1;$i<count($_POST);$i++){
+			$n = count($_POST);
+			for($i=1;$i<$n;$i++){
 					$id=$_POST['id'.$i];
 					$stmt = $user->runQuery("INSERT INTO live_quiz".$id."(quizId) VALUES($qId)");
 					$stmt->execute();
-					$stmt = $user->runQuery("INSERT INTO quiz".$qId."_takers(userId,score) VALUES ($id,0)");
+					$stmt = $user->runQuery("INSERT INTO quiz".$qId."_takers(userId) VALUES ($id)");
 					$stmt->execute();
 			}
 			$id=$_SESSION["userSession"];
 			$stmt = $user->runQuery("INSERT INTO live_quiz".$id."(quizId) VALUES ($qId)");
+			$stmt->execute();
+			$stmt = $user->runQuery("UPDATE quizlist SET numQuizTakers=$n WHERE quizId=$qId");
 			$stmt->execute();
 			unset($_SESSION['qno']);
 			unset($_SESSION['quizId']);
@@ -83,6 +86,7 @@ else {
 			cache: false,
 			success: function(response)
 			{//check response: it's always good to check server output when developing...
+				console.log(response);
 				alert("Quiz Created Successfully!");
 				window.location="home.php";
 			}

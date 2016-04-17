@@ -82,7 +82,7 @@ class USER
 			}
 			else
 			{
-				header("Location: index.php?err"); //redirect to index page with error as not found
+				header("Location: index.php?error"); //redirect to index page with error as not found
 				exit;
 			}
 		}
@@ -93,6 +93,12 @@ class USER
 		}
 	}
 
+	public function logout()
+	{
+		unset($_SESSION['userSession']);
+		session_destroy(); //end session
+	}
+
 	public function is_logged_in()
 	{
 		if (isset($_SESSION['userSession']) && isset($_SESSION['LAST_ACTIVITY'])){
@@ -101,7 +107,8 @@ class USER
 						return true;
 				}
 				else{
-					logout();
+					unset($_SESSION['userSession']);
+					session_destroy(); //end session
 					return false;
 				}
 		}
@@ -112,12 +119,6 @@ class USER
 	public function redirect($url)
 	{
 		header("Location: $url");
-	}
-
-	public function logout()
-	{
-		unset($_SESSION['userSession']);
-		session_destroy(); //end session
 	}
 
 	public function send_mail($email,$message,$subject)

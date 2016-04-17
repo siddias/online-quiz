@@ -31,15 +31,18 @@ if(isset($_GET['id']) && isset($_GET['code']))
 			$mType = "success";
 
 			if($row['userType']=='S'){
-				$stmt = $user->runQuery("CREATE TABLE past_quiz".$id."(id INT(10) NOT NULL AUTO_INCREMENT,quizId INT(10) NOT NULL,score INT(10) NOT NULL,PRIMARY KEY(id),FOREIGN KEY(quizId) REFERENCES quizlist(quizId) ON DELETE CASCADE)ENGINE = InnoDB");
+				$stmt = $user->runQuery("CREATE TABLE past_quiz".$id."(id INT(10) NOT NULL AUTO_INCREMENT,quizId INT(10) NOT NULL,score INT(10) NOT NULL,submitDate DATE,PRIMARY KEY(id),FOREIGN KEY(quizId) REFERENCES quizlist(quizId) ON DELETE CASCADE)ENGINE = InnoDB");
+				$stmt->execute();
+				$stmt = $user->runQuery("CREATE TABLE live_quiz".$id."(id INT(10) NOT NULL AUTO_INCREMENT,quizId INT(10) NOT NULL,PRIMARY KEY(id),FOREIGN KEY(quizId) REFERENCES quizlist(quizId) ON DELETE CASCADE)ENGINE = InnoDB");
 				$stmt->execute();
 			}
 			else {
-				$stmt = $user->runQuery("CREATE TABLE past_quiz".$id."(id INT(10) NOT NULL AUTO_INCREMENT,quizId INT(10) NOT NULL,PRIMARY KEY(id),FOREIGN KEY(quizId) REFERENCES quizlist(quizId) ON DELETE CASCADE)ENGINE = InnoDB");
+				$stmt = $user->runQuery("CREATE TABLE past_quiz".$id."(id INT(10) NOT NULL AUTO_INCREMENT,quizId INT(10) NOT NULL,numSubmissions INT(10) NOT NULL DEFAULT 0,scoreAvg DECIMAL(4,2) NOT NULL DEFAULT 0,PRIMARY KEY(id),FOREIGN KEY(quizId) REFERENCES quizlist(quizId) ON DELETE CASCADE)ENGINE = InnoDB");
+				$stmt->execute();
+				$stmt = $user->runQuery("CREATE TABLE live_quiz".$id."(id INT(10) NOT NULL AUTO_INCREMENT,quizId INT(10) NOT NULL,numSubmissions INT(10) NOT NULL DEFAULT 0,PRIMARY KEY(id),FOREIGN KEY(quizId) REFERENCES quizlist(quizId) ON DELETE CASCADE)ENGINE = InnoDB");
 				$stmt->execute();
 			}
-			$stmt = $user->runQuery("CREATE TABLE live_quiz".$id."(id INT(10) NOT NULL AUTO_INCREMENT,quizId INT(10) NOT NULL,PRIMARY KEY(id),FOREIGN KEY(quizId) REFERENCES quizlist(quizId) ON DELETE CASCADE)ENGINE = InnoDB");
-			$stmt->execute();
+
 		}
 		else
 		{

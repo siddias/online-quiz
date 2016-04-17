@@ -42,17 +42,24 @@ if(isset($_POST)){
 				}
 		}
 		echo "Your answers have been submitted\nYou scored ".$score."/".$_SESSION['num'];
-
-		$stmt = $user->runQuery("INSERT INTO past_quiz".$id."(quizId,score) VALUES ($quizId,$score)");
+		$currTime = date("Y-m-d H:i:s");
+		$dt = date("Y-m-d");
+		$stmt = $user->runQuery("INSERT INTO past_quiz".$id."(quizId,score,submitDate) VALUES ($quizId,$score,'$dt')");
 		$stmt->execute();
 
 		$stmt = $user->runQuery("DELETE FROM live_quiz".$id." WHERE quizId=$quizId");
 		$stmt->execute();
 
-		$currTime = date("Y-m-d H:i:s");
 		$stmt = $user->runQuery("UPDATE quiz".$quizId."_takers SET taken=1, score=$score, submitTime='$currTime' WHERE userId=$id");
 		$stmt->execute();
 
+		$stmt = $user->runQuery("SELECT userId from quizlist WHERE quizId=$quizId");
+		$stmt->execute();
+		$r =  $stmt->fetch(PDO::FETCH_ASSOC);
+
+		$stmt = $user->runQuery("UPDATE live_quiz".$r['userId']." SET numSubmissions=numSubmissions+1 WHERE quizId=$quizId");
+		$stmt->execute();
+		
 		unset($_SESSION['qId']);
 		unset($_SESSION['started']);
 		unset($_SESSION['num']);

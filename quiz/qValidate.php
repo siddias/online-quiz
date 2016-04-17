@@ -26,15 +26,6 @@ if(isset($_GET['id']) && $_GET['id']!="")
 			$mType = "error";
 		}
 		else if($currTime>strtotime($result['endTime'])) {
-			$stmt = $user->runQuery("SELECT quizId from past_quiz".$id." WHERE quizId=$qid");
-			$stmt->execute();
-			$r = $stmt->fetchAll(PDO::FETCH_ASSOC);
-			if($stmt->rowCount()==0){
-				$stmt = $user->runQuery("INSERT INTO past_quiz".$id."(quizId,score) VALUES ($qid,0)");
-				$stmt->execute();
-			}
-			$stmt = $user->runQuery("DELETE from live_quiz".$id." WHERE quizId=$qid");
-			$stmt->execute();
 			$msg = "Quiz has Ended!";
 			$mType = "error";
 		}
