@@ -66,6 +66,7 @@ if(isset($_POST['submit']) && $_POST['submit'] != "")
     <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/layout.css" />
 	<link rel="stylesheet" href="lib/datetimepicker/css/bootstrap-datetimepicker.min.css" />
+	<link rel="stylesheet" href="lib/lobibox/css/lobibox.min.css" />
 
 	<script src="lib/jquery/jquery.min.js"></script>
     <script src="lib/bootstrap/js/bootstrap.min.js"></script>
@@ -90,6 +91,14 @@ if(isset($_POST['submit']) && $_POST['submit'] != "")
 					<li ><a href="home.php"><span class="glyphicon glyphicon-home"></span></a></li>
 					<li><a href="live.php">Live Quiz</a></li>
 					<li><a href="past.php">Past Quiz</a></li>
+					<?php
+						if($_SESSION['userType']=='T')
+						{
+					?>
+							<li><a href="setQuiz.php">Set Quiz</a></li>
+					<?php
+						}
+					?>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
 					<li class="dropdown">

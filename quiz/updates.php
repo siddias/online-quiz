@@ -26,10 +26,9 @@ try{
 						$stmt = $user->runQuery("SELECT AVG(score) FROM quiz".$qid."_takers");
 		            	$stmt->execute();
 						$r= $stmt->fetch(PDO::FETCH_ASSOC);
-
 						$submissions =$row['numSubmissions'];
 						$average = $r['AVG(score)'];
-						$stmt = $user->runQuery("INSERT INTO past_quiz".$id."(quizId,numSubmissions) VALUES ($qid,$submissions)");
+						$stmt = $user->runQuery("INSERT INTO past_quiz".$id."(quizId,numSubmissions,scoreAvg) VALUES ($qid,$submissions,'$average')");
 		            	$stmt->execute();
 					}
 				$stmt = $user->runQuery("DELETE from live_quiz".$id." WHERE quizId=$qid");

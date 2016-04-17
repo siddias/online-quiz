@@ -66,6 +66,14 @@ try{
                     <li class="active"><a href="#"><span class="glyphicon glyphicon-home"></span></a></li>
                     <li><a href="live.php">Live Quiz</a></li>
                     <li><a href="past.php">Past Quiz</a></li>
+					<?php
+						if($_SESSION['userType']=='T')
+						{
+					?>
+							<li><a href="setQuiz.php">Set Quiz</a></li>
+					<?php
+						}
+					?>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li class="dropdown">

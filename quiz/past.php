@@ -21,7 +21,7 @@ try{
 		$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 	}
 	if($stmt->rowCount()==0){
-		$msg = "No Past Quizzes!";
+		$msg = "No Record of Past Quizzes!";
         $mType = "info";
 	}
 }
@@ -64,9 +64,17 @@ catch(PDOException $ex){
             </div>
             <div class="collapse navbar-collapse" id="myNavbar">
                 <ul class="nav navbar-nav">
-                    <li class="active"><a href="#"><span class="glyphicon glyphicon-home"></span></a></li>
+                    <li><a href="home.php"><span class="glyphicon glyphicon-home"></span></a></li>
                     <li><a href="live.php">Live Quiz</a></li>
                     <li><a href="past.php">Past Quiz</a></li>
+					<?php
+						if($_SESSION['userType']=='T')
+						{
+					?>
+							<li><a href="setQuiz.php">Set Quiz</a></li>
+					<?php
+						}
+					?>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li class="dropdown">
@@ -156,7 +164,8 @@ catch(PDOException $ex){
 							<td><?=$row['name']?></td>
 							<td><?=$row['sub']?></td>
 							<td><?=$row['numSubmissions']?>&#47;<?=$row['numQuizTakers']?></td>
-							<td><a href='viewResults.php?id=<?=$row['quizId']?>'>View Results</td>
+							<td><?=$row['scoreAvg']?></td>
+							<td><a href='viewSummary.php?id=<?=$row['quizId']?>'>View Summary</td>
 						</tr>
 			<?php
 				$i++;

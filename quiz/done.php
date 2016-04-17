@@ -18,6 +18,7 @@ if(isset($_POST["msg"])){
 					$stmt = $user->runQuery("INSERT INTO quiz".$qId."_takers(userId) VALUES ($id)");
 					$stmt->execute();
 			}
+			$n--;
 			$id=$_SESSION["userSession"];
 			$stmt = $user->runQuery("INSERT INTO live_quiz".$id."(quizId) VALUES ($qId)");
 			$stmt->execute();
@@ -56,8 +57,12 @@ else {
     <title>Done</title>
     <link rel="stylesheet" type="text/css" href="lib/dataTables/css/jquery.dataTables.min.css">
     <link rel="stylesheet" type="text/css" href="lib/dataTables/css/select.dataTables.min.css">
-    <script type="text/javascript" language="javascript" src="lib/jquery/jquery.min.js"></script>
-    <script type="text/javascript" language="javascript" src="lib/dataTables/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" href="lib/lobibox/css/lobibox.min.css" />
+
+	<script type="text/javascript" language="javascript" src="lib/jquery/jquery.min.js"></script>
+	<script src="lib/lobibox/js/lobibox.min.js"></script>
+	<script src="lib/lobibox/js/messageboxes.min.js"></script>
+	<script type="text/javascript" language="javascript" src="lib/dataTables/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" language="javascript" src="lib/dataTables/js/dataTables.select.min.js"></script>
     <script>
         $(document).ready(function() {
@@ -86,9 +91,12 @@ else {
 			cache: false,
 			success: function(response)
 			{//check response: it's always good to check server output when developing...
-				console.log(response);
-				alert("Quiz Created Successfully!");
-				window.location="home.php";
+			Lobibox.alert("success",
+				{ msg: "Quiz Created Successfully!",
+				callback: function(lobibox){
+					window.location="home.php";
+   				}
+			});
 			}
    });
 }

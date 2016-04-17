@@ -51,7 +51,7 @@ else {
     <title>Quiz Page</title>
     <style>
 
-		div.scroll { width:15%; overflow:auto; float:left; }
+		div.scroll { width:15%; overflow:auto; float:left; border:3px solid #4e3232; padding:25px; border-radius:5px; }
 		div.mainContent	{ float:left; margin-left:20px; line-height:3; width:75%; }
 		#left { width: 29%;}
 		#center { width: 39%; }
@@ -62,6 +62,7 @@ else {
     </style>
     <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css">
 	<link rel="stylesheet" href="lib/lobibox/css/lobibox.min.css" />
+	<link rel="stylesheet" href="css/layout.css" />
 
 	<script src="lib/jquery/jquery.min.js"></script>
     <script src="lib/bootstrap/js/bootstrap.min.js"></script>
@@ -78,12 +79,12 @@ else {
 			diff,
 			minutes,
 			seconds, ob;
-
+			var t=document.getElementById("timer");
+			var current=0;
 		function timer() {
 			// get the number of seconds that have elapsed since
 			// startTimer() was called
 			diff = duration - (((Date.now() - start) / 1000) | 0);
-
 			// does the same job as parseInt truncates the float
 			minutes = (diff / 60) | 0;
 			seconds = (diff % 60) | 0;
@@ -92,6 +93,14 @@ else {
 			seconds = seconds < 10 ? "0" + seconds : seconds;
 
 			display.textContent = minutes + ":" + seconds;
+			current++;
+			var perc=( Number(current)/Number(duration) ) * 100;
+			t.style.width= perc + "%";
+
+			if(perc>=75)
+					t.className="progress-bar progress-bar-striped progress-bar-danger active";
+			else if(perc>=50)
+					t.className="progress-bar progress-bar-striped progress-bar-warning active";
 
 			if (diff == 0) {
 				clearInterval(ob);
@@ -311,10 +320,16 @@ else {
 
 <body id="bdy" onload="init()" onbeforeunload="return showMessage()">
 
+	<nav class="navbar navbar-inverse">
+			<div class="container-fluid">
+					<div class="navbar-header">
+							<a class="navbar-brand" href="#"><img alt="Quiz-It!" src="images/Qi-logo.png"></a>
+					</div>
+			</div>
+	</nav>
+
     <div class="container">
         <h2><?php echo $_SESSION['qName']?></h2>
-        <h2> Menu bar </h2>
-
         <div class="main" id="main">
 
             <div class="scroll" id="scrollbar">
@@ -322,10 +337,13 @@ else {
                 <div class="btn-group-vertical" id="panel2"> </div>
             </div>
 
-            <div class="mainContent">
-				<div id="timer"></div>
-				<div id="ques"></div>
-				<div id="answers"></div>
+            <div class="mainContent stuff">
+				<div class="progress" style="height:30px;">
+					    <div  id="timer" class="progress-bar progress-bar-striped progress-bar-success active" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:0%; padding:5px;">
+					    </div>
+				</div>
+				<div id="ques" style="margin-left:5%; margin-top:2%;"></div>
+				<div id="answers" style="margin-left:5%; margin-top:2%;"></div>&nbsp;
                 <button type="button" class="btn btn-primary" id="left" onclick="prevQues()">Previous question</button>
                 <button type="button" class="btn btn-primary" id="center" onclick="markUnmarkQues()">Flag</button>
                 <button type="button" class="btn btn-primary" id="right" onclick="nextQues()">Next question</button>
@@ -333,6 +351,8 @@ else {
 
         </div>
     </div>
+		<div class="footer">
+		</div>
 
 </body>
 
