@@ -5,7 +5,7 @@ body{
   position: relative;;
   width:80%;
   background-color:#ffffff;
-  min-height: 530px;
+  min-height: 580px;
   z-index:1;
   margin-top: -20px;
 }
@@ -16,7 +16,7 @@ body{
   margin-top: -0.8%;
   padding: 15px 10px;
   background: #272f35;
-  min-height: 80px;
+  min-height: 50px;
   padding-top: 10px;
   z-index: 0;
 }

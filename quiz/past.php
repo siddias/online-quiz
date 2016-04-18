@@ -1,12 +1,13 @@
 <?php
 session_start();
 require_once 'class.user.php';
-require_once 'updates.php';
 
 $user = new USER();
 
 if(!$user->is_logged_in())
 	$user->redirect('index.php');
+
+require_once 'updates.php';
 
 try{
 	$id = $_SESSION['userId'];
@@ -45,11 +46,41 @@ catch(PDOException $ex){
 		<link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css">
 	    <link rel="stylesheet" href="css/layout.css" />
 		<link rel="stylesheet" href="lib/lobibox/css/lobibox.min.css" />
-
+		<link rel="stylesheet" type="text/css" href="lib/dataTables/css/jquery.dataTables.min.css">
+		<style>
+			.tab{
+				padding:20px;
+			}
+			.head{
+				background-color:rgb(87, 95, 101);
+				color:white;
+			}
+			.head>td{
+				border:1px solid rgb(200, 205, 199);
+			}
+		</style>
 		<script src="lib/jquery/jquery.min.js"></script>
 		<script src="lib/bootstrap/js/bootstrap.min.js"></script>
 		<script src="lib/lobibox/js/lobibox.min.js"></script>
 		<script src="lib/lobibox/js/messageboxes.min.js"></script>
+		<script type="text/javascript" language="javascript" src="lib/dataTables/js/jquery.dataTables.min.js"></script>
+	    <script type="text/javascript" language="javascript" src="lib/dataTables/js/dataTables.select.min.js"></script>
+		<script>
+	        $(document).ready(function() {
+	            $('#example').DataTable({
+					"columnDefs": [
+		   {"className": "dt-center", "targets": "_all"},
+		    <?php
+				if($_SESSION['userType']=='T'){
+						echo '{ "targets": [6],"orderable": false, "visible":true}';
+				}
+			?>
+		 ],
+					"pageLength": 50
+	            });
+	        });
+
+	    </script>
 </head>
 <body class="wide comments example">
     <nav class="navbar navbar-inverse">
@@ -104,29 +135,30 @@ catch(PDOException $ex){
 		exit();
     }
     ?>
-    <div class="container stuff">
-    <table id="example" border="2px" class="display" cellspacing="0" width="100%">
+	<div class="container stuff">
+	<div class="tab">
+		<table id="example" class="display cell-border hover compact stripe" cellspacing="0" width="100%" style="border:1px solid rgb(200, 205, 199); border-top-style:none;">
 		<caption>PAST QUIZZES</caption>
 		<thead>
-		<tr>
+		<tr class="head">
 			<?php
 				if($_SESSION['userType']=='S'){
 			?>
-				<th>SL No</th>
-				<th>Date</th>
-				<th>Quiz Name</th>
-				<th>Subject</th>
-				<th>Score</th>
+				<td>SL No</td>
+				<td>Date</td>
+				<td>Quiz Name</td>
+				<td>Subject</td>
+				<td>Score</td>
 			<?php
 		}else{
 			?>
-			<th>SL No</th>
-			<th>Date</th>
-			<th>Quiz Name</th>
-			<th>Subject</th>
-			<th>Submissions</th>
-			<th>Average Score</th>
-			<th></th>
+			<td>SL No</td>
+			<td>Date</td>
+			<td>Quiz Name</td>
+			<td>Subject</td>
+			<td>Submissions</td>
+			<td>Average Score</td>
+			<td></td>
 		<?php
 			}
 			?>
@@ -165,7 +197,7 @@ catch(PDOException $ex){
 							<td><?=$row['sub']?></td>
 							<td><?=$row['numSubmissions']?>&#47;<?=$row['numQuizTakers']?></td>
 							<td><?=$row['scoreAvg']?></td>
-							<td><a href='viewSummary.php?id=<?=$row['quizId']?>'>View Summary</td>
+							<td><a href='viewResults.php?id=<?=$row['quizId']?>'>View Results</td>
 						</tr>
 			<?php
 				$i++;
@@ -174,6 +206,7 @@ catch(PDOException $ex){
 			?>
 		</tbody>
     </table>
+</div>
 </div>
 <div class="footer">
 </div>

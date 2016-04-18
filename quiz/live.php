@@ -1,12 +1,14 @@
 <?php
 session_start();
 require_once 'class.user.php';
-require_once 'updates.php';
+
 $user = new USER();
 
 if(!$user->is_logged_in())
 	$user->redirect('index.php');
 
+
+require_once 'updates.php';
 try{
 	$id = $_SESSION['userSession'];
 	if($_SESSION['userType']=='S'){
@@ -41,14 +43,46 @@ try{
 
 
     <link charset="utf-8">
-		<link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css">
-	    <link rel="stylesheet" href="css/layout.css" />
-		<link rel="stylesheet" href="lib/lobibox/css/lobibox.min.css" />
+	<link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" href="css/layout.css" />
+	<link rel="stylesheet" href="lib/lobibox/css/lobibox.min.css" />
+	<link rel="stylesheet" type="text/css" href="lib/dataTables/css/jquery.dataTables.min.css">
+	<style>
+	.tab{
+		padding:10px;
+	}
+	.head{
+		background-color:rgb(87, 95, 101);
+		color:white;
+	}
+	.head>td{
+		border:1px solid rgb(200, 205, 199);
+	}
+	</style>
+	<script src="lib/jquery/jquery.min.js"></script>
+	<script src="lib/bootstrap/js/bootstrap.min.js"></script>
+	<script src="lib/lobibox/js/lobibox.min.js"></script>
+	<script src="lib/lobibox/js/messageboxes.min.js"></script>
+	<script type="text/javascript" language="javascript" src="lib/dataTables/js/jquery.dataTables.min.js"></script>
+	<script>
+		$(document).ready(function() {
+			$('#example').DataTable({
+				"columnDefs": [
+	   {"className": "dt-center", "targets": "_all"},
+	   <?php
+		if($_SESSION['userType']=='T'){
+				echo '{ "targets": [7],"orderable": false, "visible":true}';
+		}
+		else {
+		   echo '{ "targets": [4],"orderable": false, "visible":true}';
+		}
+	?>
+	 ],
+				"pageLength": 50
+			});
+		});
 
-		<script src="lib/jquery/jquery.min.js"></script>
-		<script src="lib/bootstrap/js/bootstrap.min.js"></script>
-		<script src="lib/lobibox/js/lobibox.min.js"></script>
-		<script src="lib/lobibox/js/messageboxes.min.js"></script>
+	</script>
 </head>
 <body class="wide comments example">
     <nav class="navbar navbar-inverse">
@@ -103,33 +137,33 @@ try{
 		exit();
     }
     ?>
-    <div class="container stuff">
-    <table id="example" border="2px" class="display" cellspacing="0" width="100%">
+	<div class="container stuff">
+	<div class="tab">
+		<table id="example" class="display cell-border hover compact stripe" cellspacing="0" width="100%" style="border:1px solid rgb(200, 205, 199); border-top-style:none;">
 		<caption>LIVE QUIZZES</caption>
 		<thead>
-		<tr>
-
+		<tr class="head">
 			<?php
 				if($_SESSION['userType']=='T'){
 			?>
-				<th>SL No</th>
-				<th>Start Time</th>
-				<th>End Time</th>
-				<th>Quiz Name</th>
-				<th>Subject</th>
-				<th>Duration</th>
-				<th>Submissions</th>
+				<td>SL No</td>
+				<td>Start Time</td>
+				<td>End Time</td>
+				<td>Quiz Name</td>
+				<td>Subject</td>
+				<td>Duration</td>
+				<td>Submissions</td>
 			<?php
 		}else{
 			 ?>
-				<th>SL No</th>
-	 			<th>Start Time</th>
-	 			<th>Quiz Name</th>
-	 			<th>Subject</th>
+				<td>SL No</td>
+	 			<td>Start Time</td>
+	 			<td>Quiz Name</td>
+	 			<td>Subject</td>
 			<?php
 				}
 			 ?>
-			<th></th>
+			 <td></td>
 		</tr>
 		</thead>
 		<tbody>
@@ -161,17 +195,18 @@ try{
 						<td><?=$row['duration']?></td>
 						<td><?=$row['numSubmissions']?>&#47;<?=$row['numQuizTakers']?></td>
 						<td><a href='editQuiz.php?id=<?=$row['quizId']?>'>Edit Quiz</td>
-					<tr/>
-			<?php
-				$i++;
+					</tr>
+				<?php
+					$i++;
+					}
 				}
-			}
-			?>
-		</tbody>
-    </table>
+				?>
+			</tbody>
+	    </table>
 	</div>
-    <div class="footer">
-    </div>
+	</div>
+	<div class="footer">
+	</div>
 
-</body>
-</html>
+	</body>
+	</html>

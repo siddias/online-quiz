@@ -107,13 +107,16 @@ else {
 				Lobibox.alert("success",
 				{msg: "Time is up! Answers have been submitted",
 				callback: function(lobibox){
-					sendData();
+					submitAnswers();
    				}
 			});
 			}
 
 			if (diff == 300){
-				Lobibox.alert("warning", { msg: "5 Minutes remaining!"});
+				Lobibox.alert("warning", { msg: "Less than 5 Minutes remaining!"});
+			}
+			else if(diff==60){
+				Lobibox.alert("warning", { msg: "Less than 1 minute remaining!"});
 			}
 		};
 		// we don't want to wait a full second before the timer starts
