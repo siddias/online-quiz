@@ -111,7 +111,7 @@ catch(PDOException $ex){
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-user"></span>&nbsp;<?php echo $_SESSION['fname']?><span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="#">Edit Profile</a></li>
+
                             <li><a href="logout.php">Sign Out</a></li>
                         </ul>
                     </li>
@@ -157,7 +157,7 @@ catch(PDOException $ex){
 			<td>Quiz Name</td>
 			<td>Subject</td>
 			<td>Submissions</td>
-			<td>Average Score</td>
+			<td>Average</td>
 			<td></td>
 		<?php
 			}
@@ -176,7 +176,7 @@ catch(PDOException $ex){
 							<?php if(is_null($row['submitDate']))
 										echo "NA";
 								else
-									echo $row['submitDate'];
+									echo date('d-m-Y',strtotime($row['submitDate']));
 							?></td>
 						<a><td><?=$row['name']?></td></a>
 						<td><?=$row['sub']?></td>
@@ -192,11 +192,11 @@ catch(PDOException $ex){
 				?>
 						<tr>
 							<td><?=$i?></td>
-							<td><?=$d[0]?></td>
+							<td><?=date('d-m-Y',strtotime($d[0]))?></td>
 							<td><?=$row['name']?></td>
 							<td><?=$row['sub']?></td>
 							<td><?=$row['numSubmissions']?>&#47;<?=$row['numQuizTakers']?></td>
-							<td><?=$row['scoreAvg']?></td>
+							<td><?=($row['scoreAvg']*100)?>&#37;</td>
 							<td><a href='viewResults.php?id=<?=$row['quizId']?>'>View Results</td>
 						</tr>
 			<?php

@@ -97,7 +97,7 @@ try{
             </div>
             <div class="collapse navbar-collapse" id="myNavbar">
                 <ul class="nav navbar-nav">
-                    <li class="active"><a href="#"><span class="glyphicon glyphicon-home"></span></a></li>
+                    <li><a href="#"><span class="glyphicon glyphicon-home"></span></a></li>
                     <li><a href="live.php">Live Quiz</a></li>
                     <li><a href="past.php">Past Quiz</a></li>
 					<?php
@@ -113,7 +113,7 @@ try{
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-user"></span>&nbsp;<?php echo $_SESSION['fname']?><span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="#">Edit Profile</a></li>
+
                             <li><a href="logout.php">Sign Out</a></li>
                         </ul>
                     </li>
@@ -174,7 +174,7 @@ try{
 			?>
 					<tr>
 						<td><?=$i?></td>
-						<td><?=$row['startTime']?></td>
+						<td><?=date('d-m-Y H:i:s',strtotime($row['startTime']))?></td>
 						<td><?=$row['name']?></td>
 						<td><?=$row['sub']?></td>
 						<td><a href='qValidate.php?id=<?=$row['quizId']?>'>Take Quiz</td>
@@ -188,8 +188,8 @@ try{
 			?>
 					<tr>
 						<td><?=$i?></td>
-						<td><?=$row['startTime']?></td>
-						<td><?=$row['endTime']?></td>
+						<td><?=date('d-m-Y H:i:s',strtotime($row['startTime']))?></td>
+						<td><?=date('d-m-Y H:i:s',strtotime($row['endTime']))?></td>
 						<td><?=$row['name']?></td>
 						<td><?=$row['sub']?></td>
 						<td><?=$row['duration']?></td>

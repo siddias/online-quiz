@@ -345,8 +345,8 @@ else {
 					    <div  id="timer" class="progress-bar progress-bar-striped progress-bar-success active" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:0%; padding:5px;">
 					    </div>
 				</div>
-				<div id="ques" style="margin-left:5%; margin-top:2%;"></div>
-				<div id="answers" style="margin-left:5%; margin-top:2%;"></div>&nbsp;
+				<div id="ques" style="margin-left:2%; margin-right:2%; margin-top:2%; border:3px solid #4e3232; border-radius:5px; border-bottom-style:dashed;"></div>
+<div id="answers" style="margin-left:2%; margin-right:2%; border:3px solid #4e3232; border-radius:5px; border-top-style:none;"></div>&nbsp;
                 <button type="button" class="btn btn-primary" id="left" onclick="prevQues()">Previous question</button>
                 <button type="button" class="btn btn-primary" id="center" onclick="markUnmarkQues()">Flag</button>
                 <button type="button" class="btn btn-primary" id="right" onclick="nextQues()">Next question</button>

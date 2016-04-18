@@ -49,7 +49,7 @@ if(isset($_POST['submit']) && $_POST['submit'] != "")
     $_SESSION['quizId']=$id;
 	$_SESSION['qno']=1;
 	$_SESSION['num']=$_POST['num'];
-    header('location: addQuestions.php');
+    header('location: addQuestions2.php'); //change later
 }
 ?>
 <!DOCTYPE html>
@@ -104,7 +104,7 @@ if(isset($_POST['submit']) && $_POST['submit'] != "")
 					<li class="dropdown">
 						<a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-user"></span>&nbsp;<?php echo $_SESSION['fname']?><span class="caret"></span></a>
 						<ul class="dropdown-menu">
-							<li><a href="#">Edit Profile</a></li>
+
 							<li><a href="logout.php">Sign Out</a></li>
 						</ul>
 					</li>
