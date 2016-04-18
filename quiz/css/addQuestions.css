@@ -1,0 +1,28 @@
+.content {
+    margin:auto;
+    margin-top: 10px;
+    margin-bottom: 40px;
+    width: 780px;
+    border: #333 1px solid;
+    border-radius: 12px;
+    -moz-border-radius: 12px;
+    padding: 12px;
+    display: none;
+}
+
+.qdiv {
+    width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+.tarea {
+    width: 400px;
+    height: 95px;
+}
+
+label {
+    cursor: pointer;
+    color: #06F;
+}
