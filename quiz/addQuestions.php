@@ -78,49 +78,63 @@ if(isset($_GET['msg'])){
 <head>
     <meta charset="utf-8">
     <title>Create Quiz</title>
-    <style>
-        .content {
-            margin-top: 48px;
-            margin-left: auto;
-            margin-right: auto;
-            width: 780px;
-            border: #333 1px solid;
-            border-radius: 12px;
-            -moz-border-radius: 12px;
-            padding: 12px;
-            display: none;
-        }
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css" />
+		<link rel="stylesheet" href="css/layout.css" />
+		<link rel="stylesheet" href="css/addQuestions.css" />
+		<script src="lib/jquery/jquery.min.js"></script>
+		<script src="lib/bootstrap/js/bootstrap.min.js"></script>
 
-        .qdiv {
-            width: 700px;
-            margin-left: auto;
-            margin-right: auto;
-            text-align: center;
-        }
-
-        .tarea {
-            width: 400px;
-            height: 95px;
-        }
-
-        label {
-            cursor: pointer;
-            color: #06F;
-        }
-    </style>
 </head>
 
 <body>
+	<nav class="navbar navbar-inverse">
+			<div class="container-fluid">
+					<div class="navbar-header">
+							<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+									<span class="icon-bar"></span>
+									<span class="icon-bar"></span>
+									<span class="icon-bar"></span>
+							</button>
+							<a class="navbar-brand" href="#"><img alt="Quiz-It!" src="images/Qi-logo.png"></a>
+					</div>
+					<div class="collapse navbar-collapse" id="myNavbar">
+							<ul class="nav navbar-nav">
+									<li class="active"><a href="home.php"><span class="glyphicon glyphicon-home"></span></a></li>
+									<li><a href="live.php">Live Quiz</a></li>
+									<li><a href="past.php">Past Quiz</a></li>
+				<?php
+					if($_SESSION['userType']=='T')
+					{
+				?>
+						<li><a href="setQuiz.php">Set Quiz</a></li>
+				<?php
+					}
+				?>
+				</ul>
+							</ul>
+							<ul class="nav navbar-nav navbar-right">
+									<li class="dropdown">
+											<a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-user"></span>&nbsp;<?php echo $_SESSION['fname']?><span class="caret"></span></a>
+											<ul class="dropdown-menu">
+													<li><a href="#">Edit Profile</a></li>
+													<li><a href="logout.php">Sign Out</a></li>
+											</ul>
+									</li>
+							</ul>
+					</div>
+			</div>
+	</nav>
+
+	<div class="container stuff">
     <div class="qdiv">
         <p style="color:#86b2e5;">
             <?php echo $msg; ?>
         </p>
-        <h2>What type of question would you like to create?</h2>
-        <button onClick="showDiv('TF', 'MC')">True/False</button>&nbsp;&nbsp;
-        <button onClick="showDiv('MC', 'TF')">Multiple Choice</button>&nbsp;&nbsp;
-        <span id="resetBtn">
-                <button id="done">Done</button>
-        </span>
+        <h3>What type of question would you like to create?</h3>
+        <button id="TFB" type="button" class="btn btn-primary" onClick="showDiv('TF', 'MC')">True/False</button>&nbsp;&nbsp;
+        <button id="MCB" type="button" class="btn btn-primary" onClick="showDiv('MC', 'TF')">Multiple Choice</button>&nbsp;&nbsp;
     </div>
     <div class="content" id="TF">
         <h3>True or false</h3>
@@ -190,10 +204,16 @@ if(isset($_GET['msg'])){
             <input type="submit" value="Add To Quiz">
         </form>
     </div>
+	</div>
+	<div class="footer">
+	</div>
+
 	<script>
         function showDiv(el1, el2) {
             document.getElementById(el1).style.display = 'block';
             document.getElementById(el2).style.display = 'none';
+					  document.getElementById(el1+'B').className = 'btn btn-default';
+						document.getElementById(el2+'B').className = 'btn btn-primary';
         }
     	//document.getElementById("quit").onclick = function () {
         //window.location = "done.php?quit=yes";
