@@ -70,6 +70,9 @@ else {
 	<script src="lib/lobibox/js/messageboxes.min.js"></script>
 	<script type="text/javascript" language="javascript" src="lib/dataTables/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" language="javascript" src="lib/dataTables/js/dataTables.select.min.js"></script>
+	<script type="text/javascript" src="lib/tableExport/tableExport.js"></script>
+	<script type="text/javascript" src="lib/tableExport/jquery.base64.js"></script>
+
 	<script>
         $(document).ready(function() {
             $('#example').DataTable({
@@ -158,11 +161,11 @@ else {
 			<caption>RESULTS</caption>
 			<thead>
 			<tr class="head" >
-					<td>SL No</td>
-					<td>USN</td>
-					<td>Name</td>
-					<td>Score</td>
-					<td>Percentage</td>
+					<th>SL No</th>
+					<th>USN</th>
+					<th>Name</th>
+					<th>Score</th>
+					<th>Percentage</th>
 			</tr>
 			</thead>
 			<tbody>
@@ -174,7 +177,7 @@ else {
 							<td><?=$i?></td>
 							<td><?=$row['id']?></td>
 							<td><?php echo $row['fname'].' '.$row['lname']?></td>
-							<td><?=$row['score']?>&#47;<?=$numQues?></td>
+							<td><?=$row['score']?></td>
 							<td><?php echo number_format($row['score']*100/$numQues,2)?>&#37;</td>
 						</tr>
 				<?php
@@ -184,6 +187,7 @@ else {
 			</tbody>
 		</table>
 		</div>
+		<button type="button" class="btn btn-primary btn-md" id="done" onclick="$('#example').tableExport({type:'excel',escape:'false'});">Get in Excel Sheet</button>
 	</div>
 	<div class="footer">
 	</div>
