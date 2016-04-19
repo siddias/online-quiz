@@ -98,6 +98,12 @@ else {
 	function sendData(){
 		var ob={msg:"add"};
 		var s = document.getElementsByClassName("selected");
+		if(s.length==0){
+		Lobibox.alert("error",
+			{ msg: "No Students selected!",
+	});
+}
+else{
 		for (var i = 0; i <s.length; i++) {
 			ob["id"+(i+1)]=s[i]["id"];
 		}
@@ -115,6 +121,7 @@ else {
 			});
 			}
    });
+   }
 }
 	</script>
 </head>

@@ -6,39 +6,30 @@ $user = new USER();
 
 if(!$user->is_logged_in() || $_SESSION['userType']!='T')
 	$user->redirect('index.php');
-
-if(isset($_SESSION['qno']) && isset($_SESSION['quizId']) && isset($_POST['desc']))
+if(isset($_POST['sub']) && $_POST['sub']!="" && isset($_SESSION['quizId']))
 {
-	if(!isset($_POST['iscorrect']) || $_POST['iscorrect'] == "" || !isset($_POST['type']) || $_POST['type'] == "")
-	{
-		echo "Sorry, important data to submit your question is missing. Please press back in your browser and try again and make sure you select a correct answer for the question.";
-		exit();
-	}
+	$id = $_SESSION['quizId'];
+	for($i=1;$i<=$_SESSION['num'];$i++){
+		try
+		{
+			$a1 = strip_tags( $_POST['q'.$i.'ans1']);
+			$a2 = strip_tags( $_POST['q'.$i.'ans2']);
+			if(isset($_POST['TFq'.$i])){
+				$q = strip_tags($_POST['TFq'.$i]);
+				$stmt = $user->runQuery("INSERT INTO quiz".$id."_questions(question,type) VALUES('$q', 'TF')");
+				$stmt->execute();
+				$type="TF";
+			}
+			else {
+				$q = strip_tags($_POST['MCQq'.$i]);
+				$a3 = strip_tags( $_POST['q'.$i.'ans3']);
+				$a4 = strip_tags( $_POST['q'.$i.'ans4']);
+				$stmt = $user->runQuery("INSERT INTO quiz".$id."_questions(question,type) VALUES('$q', 'MC')");
+				$stmt->execute();
+				$type="MC";
+			}
 
-	$type = preg_replace('/[^A-Z]/', "", $_POST['type']);
-	$isCorrect = preg_replace('/[^0-9a-z]/', "", $_POST['iscorrect']);
-	$a1 = strip_tags( $_POST['a1']);
-	$a2 = strip_tags($_POST['a2']);
-	$a3 = strip_tags($_POST['a3']);
-	$a4 = strip_tags($_POST['a4']);
-	$question = strip_tags($_POST['desc']);
-
-	if($type == 'TF' && (!$question || !$a1 || !$a2 || !$isCorrect)){
-			echo "Sorry, All fields must be filled in to add a new question to the quiz. Please press back in your browser and try again.";
-			exit();
-	}
-
-	if($type == 'MC' && (!$question || !$a1 || !$a2 || !$a3 || !$a4 || !$isCorrect)){
-			echo "Sorry, All fields must be filled in to add a new question to the quiz. Please press back in your browser and try again.";
-			exit();
-	}
-	try
-	{
-			$id = $_SESSION['quizId'];
-			$stmt = $user->runQuery("INSERT INTO quiz".$id."_questions(question,type) VALUES('$question', '$type')");
-			$stmt->execute();
 			$lastId = $user->lasdID();
-
 			$stmt = $user->runQuery("INSERT INTO quiz".$id."_answers(qId, answer) VALUES ('$lastId',:a)");
 			$stmt->execute(array(":a"=>$a1));
 			$aId = $user->lasdID();
@@ -50,20 +41,18 @@ if(isset($_SESSION['qno']) && isset($_SESSION['quizId']) && isset($_POST['desc']
 				$stmt->execute(array(":a"=>$a4));
 			}
 
-			$aId +=((int)$isCorrect[1])-1;
+			$isCorrect=$_POST['iscorrect'.$i];
+			$aId +=((int)$isCorrect[strlen($isCorrect)-1])-1;
 			$stmt = $user->runQuery("UPDATE quiz".$id."_answers SET correct=1 WHERE aId='$aId'");
 			$stmt->execute();
+		}
+		catch(PDOException $ex)
+	    {
+	        echo $ex->getMessage();
+			exit();
+	    }
 	}
-	catch(PDOException $ex)
-    {
-        echo $ex->getMessage();
-		exit();
-    }
-	if($_SESSION['qno']==$_SESSION['num'])
-		header('location: done.php');
-	else
-		header('location: addQuestions.php?msg=success');
-	$_SESSION['qno']++;
+	header('location: done.php');
 }
 ?>
 <?php
@@ -82,7 +71,7 @@ if(isset($_GET['msg'])){
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css" />
 		<link rel="stylesheet" href="css/layout.css" />
-		<!--<link rel="stylesheet" href="css/addQuestions.css" />-->
+		<link rel="stylesheet" href="css/addQuestions.css" />
 		<script src="lib/jquery/jquery.min.js"></script>
 		<script src="lib/bootstrap/js/bootstrap.min.js"></script>
 
@@ -118,7 +107,6 @@ if(isset($_GET['msg'])){
 									<li class="dropdown">
 											<a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-user"></span>&nbsp;<?php echo $_SESSION['fname']?><span class="caret"></span></a>
 											<ul class="dropdown-menu">
-													<li><a href="#">Edit Profile</a></li>
 													<li><a href="logout.php">Sign Out</a></li>
 											</ul>
 									</li>
@@ -128,7 +116,7 @@ if(isset($_GET['msg'])){
 	</nav>
 
 	<div class="container stuff">
-    <div class="qdiv" id="qdiv">
+    <div class="qdiv text-center" id="qdiv">
         <p style="color:#86b2e5;">
             <?php echo $msg; ?>
         </p>
@@ -157,9 +145,10 @@ if(isset($_GET['msg'])){
 						var ni = document.getElementById("content");
 						var newdiv = document.createElement('form');
 						newdiv.setAttribute('id','quesForm');
-						newdiv.setAttribute('action', 'addQuestions.php');
+						newdiv.setAttribute('action', 'addQuestions2.php');
 						newdiv.setAttribute('name', 'addQuestion');
 						newdiv.setAttribute('method', 'post');
+						newdiv.setAttribute('class','form-horizontal');
 						ni.appendChild(newdiv);
 
 						ni = document.getElementById("quesForm");
@@ -168,12 +157,13 @@ if(isset($_GET['msg'])){
 						var quesId="TFq"+Number(num);
 						var ansId1="q"+Number(num)+"ans1";
 						var ansId2="q"+Number(num)+"ans2";
+						var radioID="iscorrect"+Number(num);
 						newdiv.setAttribute('id', divIdName);
-						newdiv.setAttribute("style", "margin:5px; border-bottom:2px dashed #4e3232;");
+						newdiv.setAttribute("class", "tfqs");
 						ni.appendChild(newdiv);
 
 						ni=document.getElementById(divIdName);
-						ni.innerHTML='<p>Question Number '+num+'</p><strong>Please type your new question here</strong><br/><textarea id=\"'+quesId+'\" name=\"desc\" class=\"tarea\" required></textarea><br/><br/><strong>Please select whether true or false is the correct answer</strong><br/><input type=\"text\" id=\"'+ansId1+'\" name=\"'+ansId1+'\" value="True" readonly>&nbsp;<label><input type=\"radio\" name=\"iscorrect\" value=\"'+ansId1+'\">Correct Answer?</label><br/><br/><input type=\"text\" id=\"'+ansId2+'\" name=\"'+ansId2+'\" value=\"False\" readonly>&nbsp;<label><input type=\"radio\" name=\"iscorrect\" value=\"'+ansId2+'\">Correct Answer?</label><br/><br/>';
+						ni.innerHTML='<h2><small>Question Number '+num+'</small></h2><div class=\"form-group\"><label class=\"control-label col-sm-4\">Please type your new question here:</label></div><div class=\"form-group\"><div class=\"col-sm-offset-1 col-sm-9\"><textarea id=\"'+quesId+'\" name=\"'+quesId+'\" class=\"tarea form-control\" rows=\"5\" required></textarea></div></div><div class=\"form-group\"><label  class=\"control-label col-sm-4\">Please select the correct answer:</label></div><div class=\"form-group\"><div class=\" col-sm-offset-1 col-sm-2\"><input type=\"text\" class=\"form-control readonly\" id=\"'+ansId1+'\" name=\"'+ansId1+'\" value=\"True\" readonly></div><div class=\"col-sm-2\"><div class=\"radio\"><label><input type=\"radio\" name=\"'+radioID+'\" value=\"'+ansId1+'\" checked>Correct Answer?</label></div></div><div class=\" col-sm-offset-1 col-sm-2\"><input type=\"text\" class=\"form-control readonly\" id=\"'+ansId2+'\" name=\"'+ansId2+'\" value=\"False\" readonly></div><div class=\"col-sm-2\"><div class=\"radio\"><label><input type=\"radio\" name=\"'+radioID+'\" value=\"'+ansId2+'\">Correct Answer?</label></div></div></div>';
 						prev=num;
 						num++;
 
@@ -181,7 +171,7 @@ if(isset($_GET['msg'])){
 						newdiv.setAttribute("id","TFB");
 						newdiv.setAttribute("type", "button");
 						newdiv.setAttribute("class", "btn btn-primary");
-						newdiv.setAttribute("style", "margin:5px;");
+						newdiv.setAttribute("style", "margin-left:34%;");
 						ni.appendChild(newdiv);
 						newdiv.innerHTML="Next Question T/F";
 						newdiv.onclick=addTF;
@@ -217,20 +207,22 @@ d.removeChild(olddiv);
 						var quesId="TFq"+Number(num);
 						var ansId1="q"+Number(num)+"ans1";
 						var ansId2="q"+Number(num)+"ans2";
+						var radioID="iscorrect"+Number(num);
 						newdiv.setAttribute('id', divIdName);
-						newdiv.setAttribute("style", "margin:5px; border-bottom:2px dashed #4e3232;");
+						newdiv.setAttribute("class", "tfqs");
 						ni.appendChild(newdiv);
 
 						ni=document.getElementById(divIdName);
-						ni.innerHTML='<p>Question Number '+num+'</p><strong>Please type your new question here</strong><br/><textarea id=\"'+quesId+'\" name=\"desc\" class=\"tarea\" required></textarea><br/><br/><strong>Please select whether true or false is the correct answer</strong><br/><input type=\"text\" id=\"'+ansId1+'\" name=\"'+ansId1+'\" value="True" readonly>&nbsp;<label><input type=\"radio\" name=\"iscorrect\" value=\"'+ansId1+'\">Correct Answer?</label><br/><br/><input type=\"text\" id=\"'+ansId2+'\" name=\"'+ansId2+'\" value=\"False\" readonly>&nbsp;<label><input type=\"radio\" name=\"iscorrect\" value=\"'+ansId2+'\">Correct Answer?</label><br/><br/>';
+						ni.innerHTML='<h2><small>Question Number '+num+'</small></h2><div class=\"form-group\"><label class=\"control-label col-sm-4\">Please type your new question here:</label></div><div class=\"form-group\"><div class=\"col-sm-offset-1 col-sm-9\"><textarea id=\"'+quesId+'\" name=\"'+quesId+'\" class=\"tarea form-control\" rows=\"5\" required></textarea></div></div><div class=\"form-group\"><label  class=\"control-label col-sm-4\">Please select the correct answer:</label></div><div class=\"form-group\"><div class=\" col-sm-offset-1 col-sm-2\"><input type=\"text\" class=\"form-control readonly\" id=\"'+ansId1+'\" name=\"'+ansId1+'\" value=\"True\" readonly></div><div class=\"col-sm-2\"><div class=\"radio\"><label><input type=\"radio\" name=\"'+radioID+'\" value=\"'+ansId1+'\" checked>Correct Answer?</label></div></div><div class=\" col-sm-offset-1 col-sm-2\"><input type=\"text\" class=\"form-control readonly\" id=\"'+ansId2+'\" name=\"'+ansId2+'\" value=\"False\" readonly></div><div class=\"col-sm-2\"><div class=\"radio\"><label><input type=\"radio\" name=\"'+radioID+'\" value=\"'+ansId2+'\">Correct Answer?</label></div></div></div>';
 
 						newdiv = document.createElement('button');
-						newdiv.setAttribute("type", "button");
+						newdiv.setAttribute("name","sub");
+						newdiv.setAttribute("value","submitQues");
+						newdiv.setAttribute("type", "submit");
 						newdiv.setAttribute("class", "btn btn-primary");
-						newdiv.setAttribute("style", "margin:5px;");
+						newdiv.setAttribute("style", "margin-left:45%;");
 						ni.appendChild(newdiv);
 						newdiv.innerHTML="Submit Quiz";
-						newdiv.onclick=abc;
 					}
 					else
 					{
@@ -245,19 +237,20 @@ d.removeChild(olddiv);
 						var quesId="TFq"+Number(num);
 						var ansId1="q"+Number(num)+"ans1";
 						var ansId2="q"+Number(num)+"ans2";
+						var radioID="iscorrect"+Number(num);
 						newdiv.setAttribute('id', divIdName);
-						newdiv.setAttribute("style", "margin:10px; border-bottom:2px dashed #4e3232;");
+						newdiv.setAttribute("class", "tfqs");
 						ni.appendChild(newdiv);
 
 						ni=document.getElementById(divIdName);
-						ni.innerHTML='<p>Question Number '+num+'</p><strong>Please type your new question here</strong><br/><textarea id=\"'+quesId+'\" name=\"desc\" class=\"tarea\" required></textarea><br/><br/><strong>Please select whether true or false is the correct answer</strong><br/><input type=\"text\" id=\"'+ansId1+'\" name=\"'+ansId1+'\" value="True" readonly>&nbsp;<label><input type=\"radio\" name=\"iscorrect\" value=\"'+ansId1+'\">Correct Answer?</label><br/><br/><input type=\"text\" id=\"'+ansId2+'\" name=\"'+ansId2+'\" value=\"False\" readonly>&nbsp;<label><input type=\"radio\" name=\"iscorrect\" value=\"'+ansId2+'\">Correct Answer?</label><br/><br/>';
+						ni.innerHTML='<h2><small>Question Number '+num+'</small></h2><div class=\"form-group\"><label class=\"control-label col-sm-4\">Please type your new question here:</label></div><div class=\"form-group\"><div class=\"col-sm-offset-1 col-sm-9\"><textarea id=\"'+quesId+'\" name=\"'+quesId+'\" class=\"tarea form-control\" rows=\"5\" required></textarea></div></div><div class=\"form-group\"><label  class=\"control-label col-sm-4\">Please select the correct answer:</label></div><div class=\"form-group\"><div class=\" col-sm-offset-1 col-sm-2\"><input type=\"text\" class=\"form-control readonly\" id=\"'+ansId1+'\" name=\"'+ansId1+'\" value=\"True\" readonly></div><div class=\"col-sm-2\"><div class=\"radio\"><label><input type=\"radio\" name=\"'+radioID+'\" value=\"'+ansId1+'\" checked>Correct Answer?</label></div></div><div class=\" col-sm-offset-1 col-sm-2\"><input type=\"text\" class=\"form-control readonly\" id=\"'+ansId2+'\" name=\"'+ansId2+'\" value=\"False\" readonly></div><div class=\"col-sm-2\"><div class=\"radio\"><label><input type=\"radio\" name=\"'+radioID+'\" value=\"'+ansId2+'\">Correct Answer?</label></div></div></div>';
 						prev=num;
 						num++;
 
 						newdiv = document.createElement('button');
 						newdiv.setAttribute("type", "button");
 						newdiv.setAttribute("class", "btn btn-primary");
-						newdiv.setAttribute("style", "margin:5px;");
+						newdiv.setAttribute("style", "margin-left:34%;");
 						newdiv.setAttribute("id","TFB");
 						ni.appendChild(newdiv);
 						newdiv.innerHTML="Next Question T/F";
@@ -273,6 +266,7 @@ d.removeChild(olddiv);
 						newdiv.onclick=addMCQ;
 
 					}
+					window.scrollBy(0, 350);
 				}
 			//document.getElementById("quit").onclick = function () {
 				//window.location = "done.php?quit=yes";
@@ -291,9 +285,10 @@ d.removeChild(olddiv);
 				var ni = document.getElementById("content");
 				var newdiv = document.createElement('form');
 				newdiv.setAttribute('id','quesForm');
-				newdiv.setAttribute('action', 'addQuestions.php');
+				newdiv.setAttribute('action', 'addQuestions2.php');
 				newdiv.setAttribute('name', 'addQuestion');
 				newdiv.setAttribute('method', 'post');
+				newdiv.setAttribute('class','form-horizontal');
 				ni.appendChild(newdiv);
 
 				ni = document.getElementById("quesForm");
@@ -304,19 +299,20 @@ d.removeChild(olddiv);
 				var ansId2="q"+Number(num)+"ans2";
 				var ansId3="q"+Number(num)+"ans3";
 				var ansId4="q"+Number(num)+"ans4";
+				var radioID="iscorrect"+Number(num);
 				newdiv.setAttribute('id', divIdName);
-				newdiv.setAttribute("style", "margin:5px; border-bottom:2px dashed #4e3232;");
+				newdiv.setAttribute("class","mcqs");
 				ni.appendChild(newdiv);
 
 				ni=document.getElementById(divIdName);
-				ni.innerHTML='<p>Question Number '+num+'</p><strong>Please type your new question here</strong><br/><textarea id=\"'+quesId+'\" name=\"desc\" class=\"tarea\" required></textarea><br/><br/><strong>Answer 1</strong><br/><input type=\"text\" id=\"'+ansId1+'\" name=\"'+ansId1+'\" >&nbsp;<label><input type=\"radio\" name=\"iscorrect\" value=\"'+ansId1+'\">Correct Answer?</label><br/><br/><strong>Answer 2</strong><br/><input type=\"text\" id=\"'+ansId2+'\" name=\"'+ansId2+'\" >&nbsp;<label><input type=\"radio\" name=\"iscorrect\" value=\"'+ansId2+'\">Correct Answer?</label><br/><br/><strong>Answer 3</strong><br/><input type=\"text\" id=\"'+ansId3+'\" name=\"'+ansId3+'\" >&nbsp;<label><input type=\"radio\" name=\"iscorrect\" value=\"'+ansId3+'\">Correct Answer?</label><br/><br/><strong>Answer 4</strong><br/><input type=\"text\" id=\"'+ansId4+'\" name=\"'+ansId4+'\" >&nbsp;<label><input type=\"radio\" name=\"iscorrect\" value=\"'+ansId4+'\">Correct Answer?</label><br/>';
+				ni.innerHTML='<h2><small>Question Number '+num+'</small></h2><div class=\"form-group\"><label class=\"control-label col-sm-4\">Please type your new question here:</label></div><div class=\"form-group\"><div class=\"col-sm-offset-1 col-sm-9\"><textarea id=\"'+quesId+'\" name=\"'+quesId+'\" class=\"tarea form-control\" rows=\"5\" required></textarea></div></div><div class=\"form-group\"><label  class=\"control-label col-sm-4\">Please select the correct answer:</label></div><div class=\"form-group\"><div class=\" col-sm-offset-1 col-sm-2\"><input type=\"text\" id=\"'+ansId1+'\" class=\"form-control\" name=\"'+ansId1+'\" placeholder=\"Answer 1\"></div><div class=\"col-sm-2\"><div class=\"radio\"><label><input type=\"radio\" name=\"'+radioID+'\" value=\"'+ansId1+'\" checked>Correct Answer?</label></div></div><div class=\" col-sm-offset-1 col-sm-2\"><input type=\"text\" class=\"form-control \" id=\"'+ansId2+'\" name=\"'+ansId2+'\" placeholder=\"Answer 2\"></div><div class=\"col-sm-2\"><div class=\"radio\"><label><input type=\"radio\" name=\"'+radioID+'\" value=\"'+ansId2+'\">Correct Answer?</label></div></div></div><div class=\"form-group\"><div class=\" col-sm-offset-1 col-sm-2\"><input type=\"text\" class=\"form-control\" id=\"'+ansId3+'\" name=\"'+ansId3+'\" placeholder=\"Answer 3\"></div><div class=\"col-sm-2\"><div class=\"radio\"><label><input type=\"radio\" name=\"'+radioID+'\" value=\"'+ansId3+'\">Correct Answer?</label></div></div><div class=\" col-sm-offset-1 col-sm-2\"><input type=\"text\" class=\"form-control\" id=\"'+ansId4+'\" name=\"'+ansId4+'\" placeholder=\"Answer 4\"></div><div class=\"col-sm-2\"><div class=\"radio\"><label><input type=\"radio\" name=\"'+radioID+'\" value=\"'+ansId4+'\">Correct Answer?</label></div></div></div>';
 				prev=num;
 				num++;
 
 				newdiv = document.createElement('button');
 				newdiv.setAttribute("type", "button");
 				newdiv.setAttribute("class", "btn btn-primary");
-				newdiv.setAttribute("style", "margin:5px;");
+				newdiv.setAttribute("style", "margin-left:34%;");
 				newdiv.setAttribute("id","TFB");
 				ni.appendChild(newdiv);
 				newdiv.innerHTML="Next Question T/F";
@@ -346,20 +342,24 @@ d.removeChild(olddiv);
 				var quesId="MCQq"+Number(num);
 				var ansId1="q"+Number(num)+"ans1";
 				var ansId2="q"+Number(num)+"ans2";
+				var ansId3="q"+Number(num)+"ans3";
+				var ansId4="q"+Number(num)+"ans4";
+				var radioID="iscorrect"+Number(num);
 				newdiv.setAttribute('id', divIdName);
-				newdiv.setAttribute("style", "margin:5px; border-bottom:2px dashed #4e3232;");
+				newdiv.setAttribute("class","mcqs");
 				ni.appendChild(newdiv);
 
 				ni=document.getElementById(divIdName);
-				ni.innerHTML='<p>Question Number '+num+'</p><strong>Please type your new question here</strong><br/><textarea id=\"'+quesId+'\" name=\"desc\" class=\"tarea\" required></textarea><br/><br/><strong>Answer 1</strong><br/><input type=\"text\" id=\"'+ansId1+'\" name=\"'+ansId1+'\" >&nbsp;<label><input type=\"radio\" name=\"iscorrect\" value=\"'+ansId1+'\">Correct Answer?</label><br/><br/><strong>Answer 2</strong><br/><input type=\"text\" id=\"'+ansId2+'\" name=\"'+ansId2+'\" >&nbsp;<label><input type=\"radio\" name=\"iscorrect\" value=\"'+ansId2+'\">Correct Answer?</label><br/><br/><strong>Answer 3</strong><br/><input type=\"text\" id=\"'+ansId3+'\" name=\"'+ansId3+'\" >&nbsp;<label><input type=\"radio\" name=\"iscorrect\" value=\"'+ansId3+'\">Correct Answer?</label><br/><br/><strong>Answer 4</strong><br/><input type=\"text\" id=\"'+ansId4+'\" name=\"'+ansId4+'\" >&nbsp;<label><input type=\"radio\" name=\"iscorrect\" value=\"'+ansId4+'\">Correct Answer?</label><br/>';
+				ni.innerHTML='<h2><small>Question Number '+num+'</small></h2><div class=\"form-group\"><label class=\"control-label col-sm-4\">Please type your new question here:</label></div><div class=\"form-group\"><div class=\"col-sm-offset-1 col-sm-9\"><textarea id=\"'+quesId+'\" name=\"'+quesId+'\" class=\"tarea form-control\" rows=\"5\" required></textarea></div></div><div class=\"form-group\"><label  class=\"control-label col-sm-4\">Please select the correct answer:</label></div><div class=\"form-group\"><div class=\" col-sm-offset-1 col-sm-2\"><input type=\"text\" id=\"'+ansId1+'\" class=\"form-control\" name=\"'+ansId1+'\" placeholder=\"Answer 1\"></div><div class=\"col-sm-2\"><div class=\"radio\"><label><input type=\"radio\" name=\"'+radioID+'\" value=\"'+ansId1+'\" checked>Correct Answer?</label></div></div><div class=\" col-sm-offset-1 col-sm-2\"><input type=\"text\" class=\"form-control \" id=\"'+ansId2+'\" name=\"'+ansId2+'\" placeholder=\"Answer 2\"></div><div class=\"col-sm-2\"><div class=\"radio\"><label><input type=\"radio\" name=\"'+radioID+'\" value=\"'+ansId2+'\">Correct Answer?</label></div></div></div><div class=\"form-group\"><div class=\" col-sm-offset-1 col-sm-2\"><input type=\"text\" class=\"form-control\" id=\"'+ansId3+'\" name=\"'+ansId3+'\" placeholder=\"Answer 3\"></div><div class=\"col-sm-2\"><div class=\"radio\"><label><input type=\"radio\" name=\"'+radioID+'\" value=\"'+ansId3+'\">Correct Answer?</label></div></div><div class=\" col-sm-offset-1 col-sm-2\"><input type=\"text\" class=\"form-control\" id=\"'+ansId4+'\" name=\"'+ansId4+'\" placeholder=\"Answer 4\"></div><div class=\"col-sm-2\"><div class=\"radio\"><label><input type=\"radio\" name=\"'+radioID+'\" value=\"'+ansId4+'\">Correct Answer?</label></div></div></div>';
 
 				newdiv = document.createElement('button');
-				newdiv.setAttribute("type", "button");
+				newdiv.setAttribute("name","sub");
+				newdiv.setAttribute("value","submitQues");
+				newdiv.setAttribute("type", "submit");
 				newdiv.setAttribute("class", "btn btn-primary");
-				newdiv.setAttribute("style", "margin:5px;");
+				newdiv.setAttribute("style", "margin-left:45%;");
 				ni.appendChild(newdiv);
 				newdiv.innerHTML="Submit Quiz";
-				newdiv.onclick=abc;
 			}
 			else
 			{
@@ -374,19 +374,22 @@ d.removeChild(olddiv);
 				var quesId="MCQq"+Number(num);
 				var ansId1="q"+Number(num)+"ans1";
 				var ansId2="q"+Number(num)+"ans2";
+				var ansId3="q"+Number(num)+"ans3";
+				var ansId4="q"+Number(num)+"ans4";
+				var radioID="iscorrect"+Number(num);
 				newdiv.setAttribute('id', divIdName);
-				newdiv.setAttribute("style", "margin:10px; border-bottom:2px dashed #4e3232;");
+				newdiv.setAttribute("class","mcqs");
 				ni.appendChild(newdiv);
 
 				ni=document.getElementById(divIdName);
-				ni.innerHTML='<p>Question Number '+num+'</p><strong>Please type your new question here</strong><br/><textarea id=\"'+quesId+'\" name=\"desc\" class=\"tarea\" required></textarea><br/><br/><strong>Answer 1</strong><br/><input type=\"text\" id=\"'+ansId1+'\" name=\"'+ansId1+'\" >&nbsp;<label><input type=\"radio\" name=\"iscorrect\" value=\"'+ansId1+'\">Correct Answer?</label><br/><br/><strong>Answer 2</strong><br/><input type=\"text\" id=\"'+ansId2+'\" name=\"'+ansId2+'\" >&nbsp;<label><input type=\"radio\" name=\"iscorrect\" value=\"'+ansId2+'\">Correct Answer?</label><br/><br/><strong>Answer 3</strong><br/><input type=\"text\" id=\"'+ansId3+'\" name=\"'+ansId3+'\" >&nbsp;<label><input type=\"radio\" name=\"iscorrect\" value=\"'+ansId3+'\">Correct Answer?</label><br/><br/><strong>Answer 4</strong><br/><input type=\"text\" id=\"'+ansId4+'\" name=\"'+ansId4+'\" >&nbsp;<label><input type=\"radio\" name=\"iscorrect\" value=\"'+ansId4+'\">Correct Answer?</label><br/>';
+				ni.innerHTML='<h2><small>Question Number '+num+'</small></h2><div class=\"form-group\"><label class=\"control-label col-sm-4\">Please type your new question here:</label></div><div class=\"form-group\"><div class=\"col-sm-offset-1 col-sm-9\"><textarea id=\"'+quesId+'\" name=\"'+quesId+'\" class=\"tarea form-control\" rows=\"5\" required></textarea></div></div><div class=\"form-group\"><label  class=\"control-label col-sm-4\">Please select the correct answer:</label></div><div class=\"form-group\"><div class=\" col-sm-offset-1 col-sm-2\"><input type=\"text\" id=\"'+ansId1+'\" class=\"form-control\" name=\"'+ansId1+'\" placeholder=\"Answer 1\"></div><div class=\"col-sm-2\"><div class=\"radio\"><label><input type=\"radio\" name=\"'+radioID+'\" value=\"'+ansId1+'\" checked>Correct Answer?</label></div></div><div class=\" col-sm-offset-1 col-sm-2\"><input type=\"text\" class=\"form-control \" id=\"'+ansId2+'\" name=\"'+ansId2+'\" placeholder=\"Answer 2\"></div><div class=\"col-sm-2\"><div class=\"radio\"><label><input type=\"radio\" name=\"'+radioID+'\" value=\"'+ansId2+'\">Correct Answer?</label></div></div></div><div class=\"form-group\"><div class=\" col-sm-offset-1 col-sm-2\"><input type=\"text\" class=\"form-control\" id=\"'+ansId3+'\" name=\"'+ansId3+'\" placeholder=\"Answer 3\"></div><div class=\"col-sm-2\"><div class=\"radio\"><label><input type=\"radio\" name=\"'+radioID+'\" value=\"'+ansId3+'\">Correct Answer?</label></div></div><div class=\" col-sm-offset-1 col-sm-2\"><input type=\"text\" class=\"form-control\" id=\"'+ansId4+'\" name=\"'+ansId4+'\" placeholder=\"Answer 4\"></div><div class=\"col-sm-2\"><div class=\"radio\"><label><input type=\"radio\" name=\"'+radioID+'\" value=\"'+ansId4+'\">Correct Answer?</label></div></div></div>';
 				prev=num;
 				num++;
 
 				newdiv = document.createElement('button');
 				newdiv.setAttribute("type", "button");
 				newdiv.setAttribute("class", "btn btn-primary");
-				newdiv.setAttribute("style", "margin:5px;");
+				newdiv.setAttribute("style", "margin-left:34%;");
 				newdiv.setAttribute("id","TFB");
 				ni.appendChild(newdiv);
 				newdiv.innerHTML="Next Question T/F";
@@ -402,13 +405,8 @@ d.removeChild(olddiv);
 				newdiv.onclick=addMCQ;
 
 			}
-
+			window.scrollBy(0, 400);
 		}
-
-		function abc()
-		{
-			alert("abc");
-	}
 	</script>
 
 

@@ -47,7 +47,6 @@ if(isset($_POST['submit']) && $_POST['submit'] != "")
 		exit();
     }
     $_SESSION['quizId']=$id;
-	$_SESSION['qno']=1;
 	$_SESSION['num']=$_POST['num'];
     header('location: addQuestions2.php'); //change later
 }
