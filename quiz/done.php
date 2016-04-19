@@ -193,7 +193,12 @@ else{
 		</tbody>
     </table>
 </div>
-<button type="button" class="btn btn-primary btn-md" id="done" onclick="sendData()">Done</button>
+<div class="form-group">
+	<div class="col-sm-offset-4 col-sm-4">
+		<button type="button" class="btn btn-primary btn-lg" id="done" onclick="sendData()">Done</button>
+	</div>
+</div>
+//<button type="button" class="btn btn-primary btn-md" id="done" onclick="sendData()">Done</button>
 </div>
 <div class="footer">
 </div>
