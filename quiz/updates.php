@@ -5,12 +5,12 @@ $user = new USER();
 try{
 		$id = $_SESSION['userSession'];
 		if($_SESSION['userType']=='T'){
-			$stmt = $user->runQuery("SELECT q.quizId,l.numSubmissions,q.endTime from quizlist q,live_quiz".$id." l WHERE q.quizId=l.quizId");
+			$stmt = $user->runQuery("SELECT q.quizId,l.numSubmissions,q.endTime,q.numQuestions from quizlist q,live_quiz".$id." l WHERE q.quizId=l.quizId");
 			$stmt->execute();
 			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		}
 		else {
-			$stmt = $user->runQuery("SELECT q.quizId,q.endTime from quizlist q,live_quiz".$id." l WHERE q.quizId=l.quizId");
+			$stmt = $user->runQuery("SELECT q.quizId,q.endTime,q.numQuestions from quizlist q,live_quiz".$id." l WHERE q.quizId=l.quizId");
 			$stmt->execute();
 			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		}
@@ -27,7 +27,7 @@ try{
 		            	$stmt->execute();
 						$r= $stmt->fetch(PDO::FETCH_ASSOC);
 						$submissions =$row['numSubmissions'];
-						$average = $r['AVG(score)'];
+						$average = $r['AVG(score)']/$row['numQuestions'];
 						$stmt = $user->runQuery("INSERT INTO past_quiz".$id."(quizId,numSubmissions,scoreAvg) VALUES ($qid,$submissions,'$average')");
 		            	$stmt->execute();
 					}

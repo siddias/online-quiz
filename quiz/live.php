@@ -71,7 +71,7 @@ try{
 	   {"className": "dt-center", "targets": "_all"},
 	   <?php
 		if($_SESSION['userType']=='T'){
-				echo '{ "targets": [7],"orderable": false, "visible":true}';
+				;
 		}
 		else {
 		   echo '{ "targets": [4],"orderable": false, "visible":true}';
@@ -160,10 +160,11 @@ try{
 	 			<td>Start Time</td>
 	 			<td>Quiz Name</td>
 	 			<td>Subject</td>
+				<td></td>
 			<?php
 				}
 			 ?>
-			 <td></td>
+
 		</tr>
 		</thead>
 		<tbody>
@@ -194,7 +195,6 @@ try{
 						<td><?=$row['sub']?></td>
 						<td><?=$row['duration']?></td>
 						<td><?=$row['numSubmissions']?>&#47;<?=$row['numQuizTakers']?></td>
-						<td><a href='editQuiz.php?id=<?=$row['quizId']?>'>Edit Quiz</td>
 					</tr>
 				<?php
 					$i++;

@@ -1,173 +1,68 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <title>Live-Quizes</title>
-
-    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-
-
-    <link charset="utf-8">
-    <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/layout.css" />
-    <link rel="stylesheet" href="lib/lobibox/css/lobibox.min.css" />
-    <link rel="stylesheet" type="text/css" href="lib/dataTables/css/jquery.dataTables.min.css">
-    <style>
-
-    </style>
-    <script src="lib/jquery/jquery.min.js"></script>
-    <script src="lib/bootstrap/js/bootstrap.min.js"></script>
-    <script src="lib/lobibox/js/lobibox.min.js"></script>
-    <script src="lib/lobibox/js/messageboxes.min.js"></script>
-    <script type="text/javascript" language="javascript" src="lib/dataTables/js/jquery.dataTables.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            $('#example').DataTable({
-                "columnDefs": [{
-                    "className": "dt-center",
-                    "targets": "_all"
-                }],
-                "pageLength": 50
-            });
-        });
-    </script>
+	<title><?php echo $_SESSION['fname']?>'s Home</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="css/layout.css" />
+	<script src="lib/jquery/jquery.min.js"></script>
+	<script src="lib/bootstrap/js/bootstrap.min.js"></script>
 </head>
 
-<body class="wide comments example">
-    <nav class="navbar navbar-inverse">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="#"><img alt="Quiz-It!" src="images/Qi-logo.png"></a>
-            </div>
-            <div class="collapse navbar-collapse" id="myNavbar">
-                <ul class="nav navbar-nav">
-                    <li class="active"><a href="#"><span class="glyphicon glyphicon-home"></span></a></li>
-                    <li><a href="live.php">Live Quiz</a></li>
-                    <li><a href="past.php">Past Quiz</a></li>
-                    <?php
-						if($_SESSION['userType']=='T')
-						{
-					?>
-                        <li><a href="setQuiz.php">Set Quiz</a></li>
-                        <?php
-						}
-					?>
-                </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-user"></span>&nbsp;<?php echo $_SESSION['fname']?><span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="#">Edit Profile</a></li>
-                            <li><a href="logout.php">Sign Out</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-    <?php
-        if(isset($msg))
-        {
-    ?>
-        <script>
-            var t = "<?php echo $mType?>";
-            var m = "<?php echo $msg?>";
-            Lobibox.alert(t, {
-                msg: m,
-                callback: function(lobibox) {
-                    window.location = "home.php";
-                }
-            });
-        </script>
-        <?php
-		exit();
-    }
-    ?>
-            <div class="container stuff">
-                <div class="tab">
-                    <table id="example" class="display cell-border hover compact stripe" cellspacing="0" width="100%" style="border:1px solid rgb(200, 205, 199); border-top-style:none;">
-                        <caption>LIVE QUIZZES</caption>
-                        <thead>
-                            <tr class="head">
-                                <?php
-				if($_SESSION['userType']=='T'){
-			?>
-                                    <td>SL No</td>
-                                    <td>Start Time</td>
-                                    <td>End Time</td>
-                                    <td>Quiz Name</td>
-                                    <td>Subject</td>
-                                    <td>Duration</td>
-                                    <td>Submissions</td>
-                                    <td>Ssup</td>
-                                    <?php
-		}else{
-			 ?>
-                                        <td>SL No</td>
-                                        <td>Start Time</td>
-                                        <td>Quiz Name</td>
-                                        <td>Subject</td>
-                                        <?php
-				}
-			 ?>
-
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php
-				if($_SESSION['userType']=='S'){
-				$i=1;
-				foreach($result as $row){
-			?>
-                                <tr>
-                                    <td>
-                                        <?=$i?>
-                                    </td>
-                                    <td>
-                                        <?=$row['startTime']?>
-                                    </td>
-                                    <td>
-                                        <?=$row['name']?>
-                                    </td>
-                                    <td>
-                                        <?=$row['sub']?>
-                                    </td>
-                                    <td><a href='qValidate.php?id=<?=$row[' quizId ']?>'>Take Quiz</td>
-					</tr>
-			<?php
-				$i++;
-				}
-			}else{
-				$i=1;
-				foreach($result as $row){
-			?>
-					<tr>
-						<td><?=$i?></td>
-						<td><?=$row['startTime']?></td>
-						<td><?=$row['endTime']?></td>
-						<td><?=$row['name']?></td>
-						<td><?=$row['sub']?></td>
-						<td><?=$row['duration']?></td>
-						<td><?=$row['numSubmissions']?>&#47;<?=$row['numQuizTakers']?></td>
-						<td><a href='editQuiz.php?id=<?=$row['quizId']?>'>Edit Quiz</td>
-					</tr>
-				<?php
-					$i++;
+<body>
+	<nav class="navbar navbar-inverse">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="#"><img alt="Quiz-It!" src="images/Qi-logo.png"></a>
+			</div>
+			<div class="collapse navbar-collapse" id="myNavbar">
+				<ul class="nav navbar-nav">
+					<li class="active"><a href="home.php"><span class="glyphicon glyphicon-home"></span></a></li>
+					<li><a href="live.php">Live Quiz</a></li>
+					<li><a href="past.php">Past Quiz</a></li>
+					<?php
+					if($_SESSION['userType']=='T')
+					{
+						?>
+						<li><a href="setQuiz.php">Set Quiz</a></li>
+						<?php
 					}
-				}
-				?>
-			</tbody>
-	    </table>
+					?>
+				</ul>
+			</ul>
+			<ul class="nav navbar-nav navbar-right">
+				<li class="dropdown">
+					<a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-user"></span>&nbsp;<?php echo $_SESSION['fname']?><span class="caret"></span></a>
+					<ul class="dropdown-menu">
+						<li><a href="logout.php">Sign Out</a></li>
+					</ul>
+				</li>
+			</ul>
+		</div>
 	</div>
-	</div>
-	<div class="footer">
-	</div>
+</nav>
 
-	</body>
-	</html>
+<div class="container stuff" style="background:#ffffff;">
+	<div class="jumbotron text-primary">
+		<h1>Welcome to Quiz-it!!</h1>
+		<p>“Live as if you were to die tomorrow. Learn as if you were to live forever.” <br/>― Mahatma Gandhi</p>
+	</div>
+	<div class="" style="width:90%;margin:auto;">
+		<h2>Quiz-it <small>is designed for the sole purpose of conducting online quiz</small></h2>
+		<h2>Quiz-it <small>gives a simple interface for teachers to set quizzes and students to take it</small></h2>
+		<h2>Quiz-it	<small>is free(The best part)</small></h2>
+	</div>
+</div>
+<div class="footer">
+</div>
+
+</body>
+
+</html>

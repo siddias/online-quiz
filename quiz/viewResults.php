@@ -187,7 +187,11 @@ else {
 			</tbody>
 		</table>
 		</div>
-		<button type="button" class="btn btn-primary btn-md" id="done" onclick="$('#example').tableExport({type:'excel',escape:'false'});">Get in Excel Sheet</button>
+		<div class="form-group">
+			<div class="col-sm-offset-4 col-sm-4">
+				<button type="button" class="btn btn-primary btn-md" id="done" onclick="$('#example').tableExport({type:'excel',escape:'false'});">Get in Excel Sheet</button>
+			</div>
+		</div>
 	</div>
 	<div class="footer">
 	</div>

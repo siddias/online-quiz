@@ -7,7 +7,7 @@ $user = new USER();
 if(!$user->is_logged_in())
 $user->redirect('index.php');
 
-if(isset($_SESSION['valid']) && isset($_GET['id']) && $_GET['id']!="")
+if(isset($_SESSION['valid']) && isset($_GET['id']) && $_GET['id']!="" && !isset($_SESSION['start']))
 {
 	$qid = preg_replace('/[^0-9]/', "", $_GET['id']);
 	$id = $_SESSION['userSession'];
@@ -29,6 +29,7 @@ if(isset($_SESSION['valid']) && isset($_GET['id']) && $_GET['id']!="")
 			}
 			array_push($arr,array('qId'=>$qNum,'question'=>$r['question'],'type'=>$r['type'],'answers'=>$answers));
 		}
+		$_SESSION['start']=true;
 	}catch(PDOException $ex){
 		echo $ex->getMessage();
 		exit();
@@ -305,8 +306,12 @@ function submitAnswers(){
 		data: aIds, //no need to call JSON.stringify etc... jQ does this for you
 		cache: false,
 		success: function(response) { //check response: it's always good to check server output when developing...
-		Lobibox.alert("sucess",{msg:response});
-		window.location = "past.php";
+		Lobibox.alert("success",
+			{ msg: response,
+			callback: function(lobibox){
+				window.location="past.php";
+			}
+		});
 	}
 });
 }
@@ -319,10 +324,17 @@ function sendData() {
 	}
 });
 }
+function chk(){
+	if(stat==false)
+	{
+		submitAnswers();
+		window.location="home.php";
+	}
+}
 </script>
 </head>
 
-<body id="bdy" onload="init()" onbeforeunload="return showMessage()">
+<body id="bdy" onload="init()" onbeforeunload="return showMessage()" onunload="chk()">
 
 	<nav class="navbar navbar-inverse">
 		<div class="container-fluid">

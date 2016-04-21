@@ -17,9 +17,10 @@ if(isset($_GET['id']) && $_GET['id']!="")
 		$stmt->execute();
 		$result = $stmt->fetch(PDO::FETCH_ASSOC);
 		$currTime = time();
-		if($stmt->rowCount()==0){
+		if($stmt->rowCount()==0 || isset($_SESSION['start'])){
 			$msg = "Invalid link";
 			$mType = "error";
+			unset($_SESSION['start']);
 		}
 		else if($currTime<strtotime($result['startTime'])){
 			$msg = "Quiz Not Yet Opened";

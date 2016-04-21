@@ -59,11 +59,12 @@ if(isset($_POST)){
 
 		$stmt = $user->runQuery("UPDATE live_quiz".$r['userId']." SET numSubmissions=numSubmissions+1 WHERE quizId=$quizId");
 		$stmt->execute();
-		
+
 		unset($_SESSION['qId']);
 		unset($_SESSION['started']);
 		unset($_SESSION['num']);
 		unset($_SESSION['valid']);
+		unset($_SESSION['start']);
 	}catch(PDOException $ex){
 		echo $ex->getMessage();
 		exit();
